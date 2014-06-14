@@ -2,7 +2,6 @@ package org.bitbucket.rocketracoons.deviceradar.screen;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import org.bitbucket.rocketracoons.deviceradar.R;
+import org.bitbucket.rocketracoons.deviceradar.screen.adapter.DevicesListAdapter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
     @InjectView(R.id.startSearch)
     Button startSearch;
     @InjectView(R.id.listView)
-    ListView devicesList;
+    ListView devicesListView;
 
 
     @Override
@@ -35,6 +35,11 @@ public class MainActivity extends Activity {
         ButterKnife.inject(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        devicesListView.setAdapter(new DevicesListAdapter(this, null));
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

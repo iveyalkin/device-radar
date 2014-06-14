@@ -7,40 +7,51 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import org.bitbucket.rocketracoons.deviceradar.R;
+import org.bitbucket.rocketracoons.deviceradar.model.Device;
+
+import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by Stenopolz on 14.06.2014.
  */
 public class DevicesListAdapter extends BaseAdapter {
-        private final Activity context;
         private List<Device> devices;
         private final LayoutInflater layoutInflater;
 
-        public BookingsListAdapter(Activity context, List<Device> BookingList) {
-            this.context = context;
-            setBookings(BookingList);
+        public DevicesListAdapter(Activity context, List<Device> DeviceList) {
+            setDevices(DeviceList);
             this.layoutInflater = context.getLayoutInflater();
         }
 
         protected static class ViewHolder {
-            public TextView dateFrom;
-            public TextView dateTo;
+            @InjectView(R.id.titleTextView)
+            public TextView titleView;
+            @InjectView(R.id.subtitleTextView)
+            public TextView subtitleView;
+            public ViewHolder(View view) {
+                ButterKnife.inject(this, view);
+            }
         }
 
-        public void setBookings(List<Booking> listingBlocks) {
-            Bookings = listingBlocks;
+        public void setDevices(List<Device> devices) {
+            this.devices = devices;
             notifyDataSetChanged();
         }
 
-        public List<Booking> getBookings() {
-            return Bookings;
+        public List<Device> getDevices() {
+            return devices;
         }
 
         @Override
         public int getCount() {
-            if (Bookings != null) {
-                return Bookings.size();
+            if (devices != null) {
+                return devices.size();
             }
-            return -1;
+            return 0;
         }
 
         @Override
@@ -58,19 +69,17 @@ public class DevicesListAdapter extends BaseAdapter {
             ViewHolder holder;
             View rowView = convertView;
             if (rowView == null) {
-                rowView = layoutInflater.inflate(R.layout.list_item_bookings, null, true);
-                holder = new ViewHolder();
-                holder.dateFrom = (TextView) rowView.findViewById(R.id.dateFrom);
-                holder.dateTo = (TextView) rowView.findViewById(R.id.dateTo);
+                rowView = layoutInflater.inflate(R.layout.list_item_device_description, null, true);
+                holder = new ViewHolder(rowView);
                 rowView.setTag(holder);
             } else {
                 holder = (ViewHolder) rowView.getTag();
             }
 
-            final Booking booking = getItem(position);
+            final Device device = getItem(position);
 
-            holder.dateFrom.setText(android.text.format.DateFormat.format("hh.mm", booking.fromDate));
-            holder.dateTo.setText(android.text.format.DateFormat.format("hh.mm", booking.toDate));
+            holder.titleView.setText(device.name);
+            holder.subtitleView.setText(device.osVersion);
 
             return rowView;
         }
