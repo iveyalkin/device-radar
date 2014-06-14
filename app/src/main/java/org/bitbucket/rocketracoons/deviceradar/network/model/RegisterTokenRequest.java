@@ -10,5 +10,11 @@ import java.io.Serializable;
 public class RegisterTokenRequest implements Serializable {
     private static final long serialVersionUID = -5919734431426525558L;
 
-    @SerializedName("resultState") public boolean isSuccess;
+    @SerializedName("guid") public String guid;
+    @SerializedName("regId") public String registrationId;
+
+    public RegisterTokenRequest(String guid, String registrationId) {
+        this.guid = guid;
+        this.registrationId = registrationId;
+    }
 }
