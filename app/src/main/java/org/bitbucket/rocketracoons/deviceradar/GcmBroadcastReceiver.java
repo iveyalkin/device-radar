@@ -1,13 +1,12 @@
 package org.bitbucket.rocketracoons.deviceradar;
 
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.WakefulBroadcastReceiver;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -19,7 +18,7 @@ import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 /**
  * Created by Igor.Veyalkin on 14.06.2014.
  */
-public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
+public class GcmBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = GcmBroadcastReceiver.class.getSimpleName();
     private static final String GCM_PAYLOAD = "payload";
     private static final int REQUEST_CODE = 0xff00;
@@ -44,8 +43,6 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
                 proccessGcmMessage(context, extras);
             }
         }
-        GcmBroadcastReceiver.completeWakefulIntent(intent);
-        setResultCode(Activity.RESULT_OK);
     }
 
     private void proccessGcmMessage(Context context, Bundle gcmMessage) {

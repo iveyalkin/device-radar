@@ -3,6 +3,7 @@ package org.bitbucket.rocketracoons.deviceradar.service;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.WakefulBroadcastReceiver;
 
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.model.DeviceData;
@@ -44,24 +45,24 @@ public class TrackerService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Logger.v(TAG, "Handle intent service for: " + intent);
-        updateDeviceData(DataCollector.collectShortDeviceInformation());
+        updateDeviceData(DataCollector.collectShortDeviceInformation(), intent);
     }
 
-    private void updateDeviceData(final DeviceData data) {
+    private void updateDeviceData(final DeviceData data, final Intent intent) {
         Logger.v(TAG, "Updating device data: " + data);
 
         final ApiClient apiClient = Utility.getApiClient();
         apiClient.updateDeviceData(data.guid, data, new Callback<Device>() {
             @Override
             public void success(Device device, Response response) {
-                // TODO: stub
                 Logger.v(TAG, "Update success for: " + device);
+                WakefulBroadcastReceiver.completeWakefulIntent(intent);
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                // TODO: stub
                 Logger.v(TAG, "Update failure for: " + data + " with: " + retrofitError);
+                WakefulBroadcastReceiver.completeWakefulIntent(intent);
             }
         });
     }
