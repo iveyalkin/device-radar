@@ -1,9 +1,10 @@
 package org.bitbucket.rocketracoons.deviceradar.network;
 
+import com.google.gson.JsonElement;
+
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.model.DeviceData;
 import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
-import org.bitbucket.rocketracoons.deviceradar.network.model.RegisterTokenRequest;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.GET;
+import retrofit.http.Headers;
 import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
@@ -32,9 +34,9 @@ public interface ApiClient {
     @POST("/register")
     Device registerDevice(@Body ExtendedDeviceData deviceData);
 
-    @POST("/register/push/{guid}")
-    void registerPushToken(@Path("guid") String guid, @Body String pushId,
-                           Callback<RegisterTokenRequest> callback);
+    // TODO: something like url encoded
+    @POST("/messenger")
+    void registerPushToken(@Body JsonElement json, Callback<String> callback);
 
     @DELETE("/device/{guid}")
     void unregisterDevice(@Path("guid") String deviceGuid, Callback<Device> callback);
