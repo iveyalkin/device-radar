@@ -86,7 +86,6 @@ public class SettingsActivity extends Activity {
 
     @OnClick(R.id.disconnectButton)
     public void disconnectDevice(Button button) {
-        //TODO: unreg the device
         Logger.v(TAG, "Disconnecting device");
         unregisterDevice();
     }
@@ -98,7 +97,6 @@ public class SettingsActivity extends Activity {
         apiClient.registerDevice(deviceToRegister, new Callback<Device>() {
             @Override
             public void success(Device device, Response response) {
-                // TODO: stub
                 Logger.v(TAG, "Register success for: " + device);
                 Toast.makeText(SettingsActivity.this, "Device successfully registered", Toast.LENGTH_SHORT).show();
                 RadarApplication.instance.setDeviceRegistered(true);
@@ -108,7 +106,6 @@ public class SettingsActivity extends Activity {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                // TODO: stub
                 Logger.v(TAG, "Register failure for: " + deviceToRegister + " with: "
                         + retrofitError);
                 Toast.makeText(SettingsActivity.this, "An error occurred while registering the device", Toast.LENGTH_SHORT).show();
@@ -125,7 +122,6 @@ public class SettingsActivity extends Activity {
         apiClient.unregisterDevice(DataCollector.collectDeviceGUID(), new Callback<Device>() {
             @Override
             public void success(Device device, Response response) {
-                // TODO: stub
                 Logger.v(TAG, "Unregister success");
                 Toast.makeText(SettingsActivity.this, "Device successfully unregistered", Toast.LENGTH_SHORT).show();
                 RadarApplication.instance.setDeviceRegistered(true);
@@ -135,7 +131,6 @@ public class SettingsActivity extends Activity {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                // TODO: stub
                 Logger.v(TAG, "Register failure with: "
                         + retrofitError);
                 Toast.makeText(SettingsActivity.this, "An error occurred while unregistering the device", Toast.LENGTH_SHORT).show();

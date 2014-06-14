@@ -55,14 +55,12 @@ public class TrackerService extends IntentService {
         apiClient.updateDeviceData(data.guid, data, new Callback<Device>() {
             @Override
             public void success(Device device, Response response) {
-                // TODO: stub
                 Logger.v(TAG, "Update success for: " + device);
                 WakefulBroadcastReceiver.completeWakefulIntent(intent);
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                // TODO: stub
                 Logger.v(TAG, "Update failure for: " + data + " with: " + retrofitError);
                 WakefulBroadcastReceiver.completeWakefulIntent(intent);
             }
