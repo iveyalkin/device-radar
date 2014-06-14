@@ -1,10 +1,13 @@
 package org.bitbucket.rocketracoons.deviceradar.network;
 
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
+import org.bitbucket.rocketracoons.deviceradar.model.DeviceData;
+import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
 
 import java.util.ArrayList;
 
 import retrofit.Callback;
+import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.PUT;
 import retrofit.http.Path;
@@ -17,5 +20,8 @@ public interface ApiClient {
     void getDevicesList(Callback<ArrayList<Device>> callback);
 
     @PUT("/update/{guid}")
-    void updateDeviceData(@Path("guid") String deviceGuid, Callback<Device> callback);
+    void updateDeviceData(@Path("guid") String deviceGuid, @Body DeviceData deviceData, Callback<Device> callback);
+
+    @PUT("/register")
+    void registerDevice(@Body ExtendedDeviceData deviceData, Callback<Device> callback);
 }
