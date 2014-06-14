@@ -1,6 +1,7 @@
 package org.bitbucket.rocketracoons.deviceradar.screen;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,7 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import org.bitbucket.rocketracoons.deviceradar.MessageProgider;
 import org.bitbucket.rocketracoons.deviceradar.R;
+import org.bitbucket.rocketracoons.deviceradar.model.Message;
+import org.bitbucket.rocketracoons.deviceradar.screen.adapter.MessagesListAdapter;
+import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
+
+import java.io.Serializable;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -19,9 +26,11 @@ import butterknife.OnItemClick;
 
 
 public class MessagesActivity extends Activity {
-    public static final String ARG_MESSAGE =
-            MessagesActivity.class.getPackage().getName() + MessagesActivity.class.getSimpleName()
-            + ".argument.message";
+    private static final String TAG = MessagesActivity.class.getSimpleName();
+
+    private static final String PREFIX = MessagesActivity.class.getPackage().getName()
+            + MessagesActivity.class.getSimpleName();
+    public static final String ARG_AUTHOR_ID = PREFIX + ".argument.authorid";
 
     @InjectView(R.id.listView)
     ListView messagesListView;
@@ -30,11 +39,28 @@ public class MessagesActivity extends Activity {
     @InjectView(R.id.sendButton)
     Button sendButton;
 
+    private String threadAuthorId;
+    private MessagesListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages);
         ButterKnife.inject(this);
+
+        Bundle extras = getIntent().getExtras();
+        if (null != extras && extras.containsKey(ARG_AUTHOR_ID)) {
+            threadAuthorId = extras.getString(ARG_AUTHOR_ID);
+            Logger.w(TAG, "Show thread with authorId: " + threadAuthorId);
+            prepareAdapter(threadAuthorId);
+        } else {
+            Logger.w(TAG, "Nothing to show");
+            finish();
+        }
+    }
+
+    private void prepareAdapter(String threadAuthorId) {
+        adapter = new MessagesListAdapter(this, MessageProgider.getMessages(threadAuthorId));
     }
 
 

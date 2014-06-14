@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.bitbucket.rocketracoons.deviceradar.model.Message;
 import org.bitbucket.rocketracoons.deviceradar.network.model.PushNotification;
 import org.bitbucket.rocketracoons.deviceradar.screen.MessagesActivity;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
@@ -49,6 +50,8 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
         PushNotification pushNotification = Utility.getGsonInstance().fromJson(
                 gcmMessage.getString(GCM_PAYLOAD), PushNotification.class);
 
+        MessageProgider.addMessage(pushNotification.authorId, pushNotification.message);
+
         raiseNotification(context, pushNotification);
     }
 
@@ -57,7 +60,6 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent messageActivity = new Intent(context, MessagesActivity.class);
-        messageActivity.putExtra(MessagesActivity.ARG_MESSAGE, pushNotification);
         PendingIntent contentIntent = PendingIntent.getActivity(context, REQUEST_CODE,
                 messageActivity, PendingIntent.FLAG_UPDATE_CURRENT);
 
