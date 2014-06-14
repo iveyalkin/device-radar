@@ -1,9 +1,11 @@
-package org.bitbucket.rocketracoons.deviceradar;
+package org.bitbucket.rocketracoons.deviceradar.screen;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import org.bitbucket.rocketracoons.deviceradar.R;
 
 
 public class MainActivity extends Activity {

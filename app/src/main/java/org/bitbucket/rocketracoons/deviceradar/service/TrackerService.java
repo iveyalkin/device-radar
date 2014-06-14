@@ -1,4 +1,4 @@
-package org.bitbucket.rocketracoons.deviceradar;
+package org.bitbucket.rocketracoons.deviceradar.service;
 
 import android.app.IntentService;
 import android.content.Intent;

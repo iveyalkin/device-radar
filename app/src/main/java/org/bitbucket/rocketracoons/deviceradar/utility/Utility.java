@@ -1,4 +1,4 @@
-package org.bitbucket.rocketracoons.deviceradar;
+package org.bitbucket.rocketracoons.deviceradar.utility;
 
 import android.content.Context;
 import android.net.wifi.WifiInfo;
