@@ -33,14 +33,19 @@ public class DataCollector {
         WifiInfo wifiInfo = getWifiInfo();
         return new ExtendedDeviceData(RadarApplication.instance.getDeviceName(), collectDeviceGUID(),
                 "Android "+ Build.VERSION.RELEASE, 01, 01, wifiInfo.getSSID(),
-                wifiInfo.getMacAddress(), "pushToken", getTotalRAM(), getInternalStorageSpace(),
+                wifiInfo.getMacAddress(),
+                RadarApplication.instance.getRegistrationId(RadarApplication.instance),
+                getTotalRAM(), getInternalStorageSpace(),
                 hasMobileNetwork(), getScreenResolution());
     }
 
     public static DeviceData collectShortDeviceInformation() {
         Logger.v(TAG, "Collecting short data");
         WifiInfo wifiInfo = getWifiInfo();
-        return new DeviceData(RadarApplication.instance.getDeviceName(), collectDeviceGUID(), "Android "+ Build.VERSION.RELEASE, 01, 0l, wifiInfo.getSSID(), wifiInfo.getMacAddress(), "pushToken");
+        return new DeviceData(RadarApplication.instance.getDeviceName(), collectDeviceGUID(),
+                "Android "+ Build.VERSION.RELEASE, 01, 0l, wifiInfo.getSSID(),
+                wifiInfo.getMacAddress(),
+                RadarApplication.instance.getRegistrationId(RadarApplication.instance));
     }
 
     public static String collectDeviceGUID() {
