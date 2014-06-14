@@ -15,5 +15,8 @@
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="connectDeviceButtonTitle">Connect Device</string>
     <string name="disconnectDeviceButtonTitle">Disconnect Device</string>
+    <string name="loginHint">Login</string>
+    <string name="passwordHint">Password</string>
+    <string name="deviceNameHint">Device name</string>
 
 </resources>

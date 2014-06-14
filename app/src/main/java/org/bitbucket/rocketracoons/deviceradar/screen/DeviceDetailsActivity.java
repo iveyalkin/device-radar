@@ -2,6 +2,7 @@ package org.bitbucket.rocketracoons.deviceradar.screen;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -33,7 +34,47 @@ public class DeviceDetailsActivity extends Activity {
 
         Bundle intentBundle = getIntent().getExtras();
         if (intentBundle != null) {
-            device = (Device)intentBundle.getSerializable(DEVICE_EXTRA_NAME);
+            device = (Device) intentBundle.getSerializable(DEVICE_EXTRA_NAME);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (device != null) {
+            titleTextView.setText(device.name);
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            if (!TextUtils.isEmpty(device.osVersion)) {
+                stringBuilder.append("OS Version: ");
+                stringBuilder.append(device.osVersion);
+                stringBuilder.append('\n');
+            }
+
+            if (!TextUtils.isEmpty(device.screen)) {
+                stringBuilder.append("Screen Resolution: ");
+                stringBuilder.append(device.screen);
+                stringBuilder.append('\n');
+            }
+
+            stringBuilder.append("3G Module: ");
+            if (device.gsmModule) {
+                stringBuilder.append("available");
+            } else {
+                stringBuilder.append("n/a");
+            }
+            stringBuilder.append('\n');
+
+            stringBuilder.append("RAM Amount: ");
+            stringBuilder.append(device.ramAmount);
+            stringBuilder.append(" Mb");
+            stringBuilder.append('\n');
+
+            stringBuilder.append("Internal Memory: ");
+            stringBuilder.append(device.memoryAmount);
+            stringBuilder.append(" Mb");
+            stringBuilder.append('\n');
         }
     }
 

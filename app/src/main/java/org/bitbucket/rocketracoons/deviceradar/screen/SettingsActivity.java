@@ -4,18 +4,32 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.bitbucket.rocketracoons.deviceradar.R;
+import org.bitbucket.rocketracoons.deviceradar.RadarApplication;
+import org.bitbucket.rocketracoons.deviceradar.model.Device;
+import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
+import org.bitbucket.rocketracoons.deviceradar.network.ApiClient;
+import org.bitbucket.rocketracoons.deviceradar.utility.DataCollector;
+import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
+import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by Stenopolz on 14.06.2014.
  */
 public class SettingsActivity extends Activity {
+    private static String TAG = SettingsActivity.class.getSimpleName();
+
     @InjectView(R.id.connectButton)
     Button connectButton;
     @InjectView(R.id.disconnectButton)
@@ -23,9 +37,26 @@ public class SettingsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ButterKnife.inject(this);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        setupButtons();
+    }
+
+    private void setupButtons() {
+        if (RadarApplication.instance.isDeviceRegistered()) {
+            connectButton.setEnabled(false);
+            disconnectButton.setEnabled(true);
+        } else {
+            connectButton.setEnabled(true);
+            disconnectButton.setEnabled(false);
+        }
     }
 
     @Override
@@ -49,11 +80,68 @@ public class SettingsActivity extends Activity {
 
     @OnClick(R.id.connectButton)
     public void connectDevice(Button button) {
-
+        Logger.v(TAG, "Connecting device");
+        registerDevice(DataCollector.collectCompleteDeviceInformation());
     }
 
     @OnClick(R.id.disconnectButton)
     public void disconnectDevice(Button button) {
-
+        //TODO: unreg the device
+        Logger.v(TAG, "Disconnecting device");
+        unregisterDevice();
     }
+    private void registerDevice(final ExtendedDeviceData deviceToRegister) {
+        Logger.v(TAG, "Registering device: " + deviceToRegister);
+
+        final ApiClient apiClient = Utility.getApiClient();
+        setProgressBarIndeterminateVisibility(true);
+        apiClient.registerDevice(deviceToRegister, new Callback<Device>() {
+            @Override
+            public void success(Device device, Response response) {
+                // TODO: stub
+                Logger.v(TAG, "Register success for: " + device);
+                Toast.makeText(SettingsActivity.this, "Device successfully registered", Toast.LENGTH_SHORT).show();
+                RadarApplication.instance.setDeviceRegistered(true);
+                setupButtons();
+                setProgressBarIndeterminateVisibility(false);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                // TODO: stub
+                Logger.v(TAG, "Register failure for: " + deviceToRegister + " with: "
+                        + retrofitError);
+                Toast.makeText(SettingsActivity.this, "An error occurred while registering the device", Toast.LENGTH_SHORT).show();
+                setProgressBarIndeterminateVisibility(false);
+            }
+        });
+    }
+
+    private void unregisterDevice(){
+        Logger.v(TAG, "Unregistering device");
+
+        final ApiClient apiClient = Utility.getApiClient();
+        setProgressBarIndeterminateVisibility(true);
+        apiClient.unregisterDevice(DataCollector.collectDeviceGUID(), new Callback<Device>() {
+            @Override
+            public void success(Device device, Response response) {
+                // TODO: stub
+                Logger.v(TAG, "Unregister success");
+                Toast.makeText(SettingsActivity.this, "Device successfully unregistered", Toast.LENGTH_SHORT).show();
+                RadarApplication.instance.setDeviceRegistered(true);
+                setupButtons();
+                setProgressBarIndeterminateVisibility(false);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                // TODO: stub
+                Logger.v(TAG, "Register failure with: "
+                        + retrofitError);
+                Toast.makeText(SettingsActivity.this, "An error occurred while unregistering the device", Toast.LENGTH_SHORT).show();
+                setProgressBarIndeterminateVisibility(false);
+            }
+        });
+    }
+
 }
