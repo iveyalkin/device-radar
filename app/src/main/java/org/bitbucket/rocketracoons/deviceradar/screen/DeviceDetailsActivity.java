@@ -33,7 +33,7 @@ public class DeviceDetailsActivity extends Activity {
 
         Bundle intentBundle = getIntent().getExtras();
         if (intentBundle != null) {
-            device = intentBundle.getSerializable(DEVICE_EXTRA_NAME);
+            device = (Device)intentBundle.getSerializable(DEVICE_EXTRA_NAME);
         }
     }
 
