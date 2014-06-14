@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ExtendedDeviceData extends DeviceData {
     @SerializedName("ram") public String ramAmount;
-    @SerializedName("memory") public String memoryAmount;
+    @SerializedName("internalMemory") public String memoryAmount;
     @SerializedName("gsm") public Boolean gsmModule;
     @SerializedName("screen") public String screen;
 }
