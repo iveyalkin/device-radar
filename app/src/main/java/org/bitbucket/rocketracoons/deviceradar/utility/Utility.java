@@ -40,7 +40,7 @@ public class Utility {
                     .create();
 
             final RestAdapter restAdapter = new RestAdapter.Builder()
-                    .setEndpoint(Constants.URL)
+                    .setEndpoint(Constants.Config.getCurrentConfig().getUrl())
                     .setConverter(new GsonConverter(gson))
                     .setLog(new Logger.Retrofit())
                     .setLogLevel(RestAdapter.LogLevel.FULL)
