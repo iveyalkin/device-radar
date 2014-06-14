@@ -9,6 +9,7 @@ import org.bitbucket.rocketracoons.deviceradar.model.DeviceData;
 import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
 import org.bitbucket.rocketracoons.deviceradar.network.ApiClient;
 import org.bitbucket.rocketracoons.deviceradar.utility.Constants;
+import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
 import retrofit.Callback;
@@ -23,6 +24,8 @@ import retrofit.client.Response;
  * helper methods.
  */
 public class TrackerService extends IntentService {
+    private static final String TAG = TrackerService.class.getSimpleName();
+
     private static final String ACTION_COLLECT_SHORT =
             "org.bitbucket.rocketracoons.deviceradar.action.COLLECT_SHORT";
     private static final String ACTION_COLLECT_COMPLETE =
@@ -60,6 +63,7 @@ public class TrackerService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Logger.v(TAG, "Handle intent service for: " + intent);
         if (null != intent) {
             final String action = intent.getAction();
             if (ACTION_COLLECT_SHORT.equals(action)) {
@@ -73,41 +77,55 @@ public class TrackerService extends IntentService {
     }
 
     private void collectCompleteDeviceInformation() {
-        final ExtendedDeviceData device = new ExtendedDeviceData();
+        Logger.v(TAG, "Collecting complete data");
+
+        final ExtendedDeviceData device = new ExtendedDeviceData("", "", "", 0l, 0l, "", "", "", 0,
+                0, false, "");
         registerDevice(device);
     }
 
     private void collectShortDeviceInformation() {
-        final DeviceData device = new DeviceData();
+        Logger.v(TAG, "Collecting short data");
+
+        final DeviceData device = new DeviceData("", "", "", 0l, 0l, "", "", "");
         updateDevicceData(device);
     }
 
-    private void registerDevice(ExtendedDeviceData device) {
+    private void registerDevice(final ExtendedDeviceData deviceToRegister) {
+        Logger.v(TAG, "Registering device: " + deviceToRegister);
+
         final ApiClient apiClient = Utility.getApiClient();
-        apiClient.registerDevice(device, new Callback<Device>() {
+        apiClient.registerDevice(deviceToRegister, new Callback<Device>() {
             @Override
             public void success(Device device, Response response) {
                 // TODO: stub
+                Logger.v(TAG, "Register success for: " + device);
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
                 // TODO: stub
+                Logger.v(TAG, "Register failure for: " + deviceToRegister + " with: "
+                        + retrofitError);
             }
         });
     }
 
-    private void updateDevicceData(DeviceData data) {
+    private void updateDevicceData(final DeviceData data) {
+        Logger.v(TAG, "Updating device data: " + data);
+
         final ApiClient apiClient = Utility.getApiClient();
         apiClient.updateDeviceData(data.guid, data, new Callback<Device>() {
             @Override
             public void success(Device device, Response response) {
                 // TODO: stub
+                Logger.v(TAG, "Update success for: " + device);
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
                 // TODO: stub
+                Logger.v(TAG, "Update failure for: " + data + " with: " + retrofitError);
             }
         });
     }
