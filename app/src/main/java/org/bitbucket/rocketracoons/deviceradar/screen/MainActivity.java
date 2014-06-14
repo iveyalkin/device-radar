@@ -11,7 +11,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import org.bitbucket.rocketracoons.deviceradar.R;
+import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.screen.adapter.DevicesListAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -27,18 +31,29 @@ public class MainActivity extends Activity {
     @InjectView(R.id.listView)
     ListView devicesListView;
 
+    List<Device> devicesList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+        devicesList = new ArrayList<Device>();
+        Device device = new Device();
+        device.name = "Android-004";
+        device.osVersion = "Android 4.2.1";
+        devicesList.add(device);
+        device = new Device();
+        device.name = "Android-005";
+        device.osVersion = "Android 4.0.4";
+        devicesList.add(device);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        devicesListView.setAdapter(new DevicesListAdapter(this, null));
+        devicesListView.setAdapter(new DevicesListAdapter(this, devicesList));
     }
 
     @Override
