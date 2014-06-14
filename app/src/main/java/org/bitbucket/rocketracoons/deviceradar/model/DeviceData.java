@@ -9,7 +9,9 @@ public class DeviceData {
     @SerializedName("name") public String name;
     @SerializedName("guid") public String guid;
     @SerializedName("versionOS") public String osVersion;
-    @SerializedName("location") public String location;
+    @SerializedName("longitude") public long longitude;
+    @SerializedName("latitude") public long latitude;
     @SerializedName("ssid") public String ssid;
-    @SerializedName("macAddress") public String macAddress;
+    @SerializedName("mac") public String macAddress;
+    @SerializedName("pushToken") public String pushToken;
 }
