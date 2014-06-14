@@ -2,6 +2,8 @@ package org.bitbucket.rocketracoons.deviceradar.utility;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.os.Environment;
+import android.os.StatFs;
 import android.provider.Settings;
 import android.view.Display;
 import android.view.WindowManager;
@@ -25,14 +27,13 @@ public class DataCollector {
     public static ExtendedDeviceData collectCompleteDeviceInformation() {
         Logger.v(TAG, "Collecting complete data");
 
-        return new ExtendedDeviceData("Android-004", collectDeviceGUID(), "dfg", 0l, 0l, "sadfga", "ASDF", "sdf", 1024,
-                15, false, "hdpi");
+        return new ExtendedDeviceData("Android-004", collectDeviceGUID(), "dfg", 01, 01, "sadfga", "ASDF", "sdf", getTotalRAM(), getInternalStorageSpace(), false, "hdpi");
     }
 
     public static DeviceData collectShortDeviceInformation() {
         Logger.v(TAG, "Collecting short data");
 
-        return new DeviceData("", collectDeviceGUID(), "", 0l, 0l, "", "", "");
+        return new DeviceData("", collectDeviceGUID(), "", 01, 0l, "", "", "");
     }
 
     public static String collectDeviceGUID() {
@@ -49,13 +50,13 @@ public class DataCollector {
         return String.valueOf(size.x) + "x" + String.valueOf(size.y);
     }
 
-    public String getTotalRAM() {
+    public static int getTotalRAM() {
 
         RandomAccessFile reader = null;
         String load = null;
         DecimalFormat twoDecimalForm = new DecimalFormat("#.##");
         double totRam = 0;
-        String lastValue = "";
+        int lastValue = 0;
         try {
             reader = new RandomAccessFile("/proc/meminfo", "r");
             load = reader.readLine();
@@ -74,18 +75,7 @@ public class DataCollector {
             // totRam = totRam / 1024;
 
             double mb = totRam / 1024.0;
-            double gb = totRam / 1048576.0;
-            double tb = totRam / 1073741824.0;
-
-            if (tb > 1) {
-                lastValue = twoDecimalForm.format(tb).concat(" TB");
-            } else if (gb > 1) {
-                lastValue = twoDecimalForm.format(gb).concat(" GB");
-            } else if (mb > 1) {
-                lastValue = twoDecimalForm.format(mb).concat(" MB");
-            } else {
-                lastValue = twoDecimalForm.format(totRam).concat(" KB");
-            }
+            lastValue = (int)Math.round(mb);
 
 
         } catch (IOException ex) {
@@ -95,5 +85,13 @@ public class DataCollector {
         }
 
         return lastValue;
+    }
+
+    public static int getInternalStorageSpace()
+    {
+        StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
+        //StatFs statFs = new StatFs("/data");
+        long total = ((long)statFs.getBlockCount() * (long)statFs.getBlockSize()) / 1024*1024*1024;
+        return (int)total;
     }
 }

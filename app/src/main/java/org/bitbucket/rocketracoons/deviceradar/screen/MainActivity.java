@@ -22,6 +22,7 @@ import org.bitbucket.rocketracoons.deviceradar.R;
 import org.bitbucket.rocketracoons.deviceradar.RadarApplication;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.screen.adapter.DevicesListAdapter;
+import org.bitbucket.rocketracoons.deviceradar.utility.DataCollector;
 import org.bitbucket.rocketracoons.deviceradar.utility.GcmSupportedType;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
@@ -72,7 +73,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-
+        DataCollector.getTotalRAM();
         GcmSupportedType gcmSupportedType = RadarApplication.instance.checkGooglePlayServices();
         switch (gcmSupportedType) {
             case SUPPORTED:
