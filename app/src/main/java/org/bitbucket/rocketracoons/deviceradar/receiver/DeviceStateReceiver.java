@@ -22,8 +22,10 @@ public class DeviceStateReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Logger.v(TAG, "Received broadcast: " + intent.getAction());
+        //TODO: check isRegistered notify log when not registered
         if (processIntent(intent)) {
             Logger.v(TAG, "Launch track service");
+
             startWakefulService(context, TrackerService.getShortCollectingIntent(context));
         }
     }
