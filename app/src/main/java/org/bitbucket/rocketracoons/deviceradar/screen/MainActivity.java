@@ -21,9 +21,13 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import org.bitbucket.rocketracoons.deviceradar.R;
 import org.bitbucket.rocketracoons.deviceradar.RadarApplication;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
+import org.bitbucket.rocketracoons.deviceradar.network.ApiClient;
+import org.bitbucket.rocketracoons.deviceradar.network.model.LoginRequest;
+import org.bitbucket.rocketracoons.deviceradar.network.model.LoginResponse;
 import org.bitbucket.rocketracoons.deviceradar.screen.adapter.DevicesListAdapter;
 import org.bitbucket.rocketracoons.deviceradar.utility.DataCollector;
 import org.bitbucket.rocketracoons.deviceradar.utility.GcmSupportedType;
+import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
 import java.util.ArrayList;
@@ -161,9 +165,7 @@ public class MainActivity extends Activity {
         alertDialog.setPositiveButton("Login",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO: add login
-                        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                        startActivity(intent);
+                        processLogin(login.getText().toString(), password.getText().toString());
                     }
                 }
         );
@@ -178,6 +180,32 @@ public class MainActivity extends Activity {
         );
         // Showing Alert Message
         alertDialog.show();
+    }
+
+    private void processLogin(String login, String password) {
+        final ApiClient apiClient = Utility.getApiClient();
+        setProgressBarIndeterminateVisibility(true);
+        apiClient.auth(new LoginRequest(login, password), new Callback<LoginResponse>() {
+                            @Override
+                public void success(LoginResponse loginResponse, Response response) {
+                    Logger.v(TAG, "Login success for");
+                    if (loginResponse.role.equalsIgnoreCase("admin")) {
+                        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(MainActivity.this, "You don't have enough rights to manage the device", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+                @Override
+                public void failure(RetrofitError retrofitError) {
+                    Logger.v(TAG, "Login failure with: "
+                            + retrofitError);
+                    Toast.makeText(MainActivity.this, "Can't log in", Toast.LENGTH_SHORT).show();
+                    setProgressBarIndeterminateVisibility(false);
+                }
+        });
     }
 
 }

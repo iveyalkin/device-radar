@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.model.DeviceData;
 import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
+import org.bitbucket.rocketracoons.deviceradar.network.model.LoginRequest;
+import org.bitbucket.rocketracoons.deviceradar.network.model.LoginResponse;
 
 import java.util.ArrayList;
 
@@ -21,7 +23,7 @@ import retrofit.http.Path;
  * Created by Igor.Veyalkin on 14.06.2014.
  */
 public interface ApiClient {
-    @GET("/device")
+    @GET("/update")
     void getDevicesList(Callback<ArrayList<Device>> callback);
 
     @PUT("/update/{guid}")
@@ -40,4 +42,7 @@ public interface ApiClient {
 
     @DELETE("/device/{guid}")
     void unregisterDevice(@Path("guid") String deviceGuid, Callback<Device> callback);
+
+    @POST("/auth")
+    void auth(@Body LoginRequest loginRequest, Callback<LoginResponse> callback);
 }

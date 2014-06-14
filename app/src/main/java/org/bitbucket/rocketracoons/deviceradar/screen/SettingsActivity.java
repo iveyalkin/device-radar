@@ -3,7 +3,6 @@ package org.bitbucket.rocketracoons.deviceradar.screen;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -88,7 +87,7 @@ public class SettingsActivity extends Activity {
     @OnClick(R.id.connectButton)
     public void connectDevice(Button button) {
         Logger.v(TAG, "Connecting device");
-
+        showNamePrompt();
     }
 
     @OnClick(R.id.disconnectButton)
@@ -96,6 +95,7 @@ public class SettingsActivity extends Activity {
         Logger.v(TAG, "Disconnecting device");
         unregisterDevice();
     }
+
     private void registerDevice(final ExtendedDeviceData deviceToRegister) {
         Logger.v(TAG, "Registering device: " + deviceToRegister);
 
@@ -121,7 +121,7 @@ public class SettingsActivity extends Activity {
         });
     }
 
-    private void unregisterDevice(){
+    private void unregisterDevice() {
         Logger.v(TAG, "Unregistering device");
 
         final ApiClient apiClient = Utility.getApiClient();
@@ -146,7 +146,7 @@ public class SettingsActivity extends Activity {
         });
     }
 
-    private void showLoginPrompt() {
+    private void showNamePrompt() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
         // Setting Dialog Title
