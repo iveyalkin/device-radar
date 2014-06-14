@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.text.TextUtils;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -17,6 +20,8 @@ import org.bitbucket.rocketracoons.deviceradar.utility.DataCollector;
 import org.bitbucket.rocketracoons.deviceradar.utility.GcmSupportedType;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
+
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -43,7 +48,6 @@ public class RadarApplication extends Application {
         //  GCM registration.
         if (GcmSupportedType.SUPPORTED == checkGooglePlayServices()) {
             final String registrationId = getRegistrationId(getApplicationContext());
-
             if (TextUtils.isEmpty(registrationId)) {
                 registerInBackground();
             }
@@ -173,5 +177,23 @@ public class RadarApplication extends Application {
         getSharedPreferences().edit()
                 .putBoolean(DEVICE_REGISTERED_PREFERENCE_NAME, isRegistered)
                 .apply();
+    }
+
+    public double[] getLocation() {
+        LocationManager locationManager =
+                (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String bestProvider = locationManager.getBestProvider(criteria, false);
+        Location location = locationManager.getLastKnownLocation(bestProvider);
+        if (null != location) {
+            final double[] coordinates = {location.getLatitude(), location.getLongitude()};
+            Logger.d(TAG, "Found last known location {" + coordinates[0] + "; "
+                    + coordinates[1] + "}");
+            return coordinates;
+        } else {
+            Logger.w(TAG, "Last known location not found");
+        }
+
+        return new double[] {0.0d, 0.0d};
     }
 }

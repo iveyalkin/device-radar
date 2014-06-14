@@ -2,8 +2,10 @@ package org.bitbucket.rocketracoons.deviceradar.screen;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,13 +18,17 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.bitbucket.rocketracoons.deviceradar.R;
 import org.bitbucket.rocketracoons.deviceradar.RadarApplication;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.screen.adapter.DevicesListAdapter;
 import org.bitbucket.rocketracoons.deviceradar.utility.GcmSupportedType;
+import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
 import java.util.ArrayList;
@@ -40,7 +46,7 @@ import retrofit.client.Response;
 public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 0xff00;
 
     @InjectView(R.id.searchField)
     EditText searchField;
@@ -73,10 +79,14 @@ public class MainActivity extends Activity {
     protected void onPostResume() {
         super.onPostResume();
 
+        tryGooglePlayServices();
+    }
+
+    private void tryGooglePlayServices() {
         GcmSupportedType gcmSupportedType = RadarApplication.instance.checkGooglePlayServices();
         switch (gcmSupportedType) {
             case SUPPORTED:
-                requestDeviceList();
+                googlePlayServicesEnabled();
                 break;
             case SUPPORTED_BUT_USER: {
                 final int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
@@ -88,6 +98,10 @@ public class MainActivity extends Activity {
                 finish();
                 break;
         }
+    }
+
+    private void googlePlayServicesEnabled() {
+        requestDeviceList();
     }
 
     private void requestDeviceList() {
@@ -181,4 +195,23 @@ public class MainActivity extends Activity {
         alertDialog.show();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case PLAY_SERVICES_RESOLUTION_REQUEST :
+            /*
+             * If the result code is Activity.RESULT_OK, try
+             * to connect again
+             */
+                switch (resultCode) {
+                case Activity.RESULT_OK:
+                    tryGooglePlayServices();
+                    break;
+                default:
+                    Toast.makeText(this, "Oooops, User doesn't whant a GP services...",
+                            Toast.LENGTH_LONG).show();
+                    break;
+                }
+        }
+    }
 }
