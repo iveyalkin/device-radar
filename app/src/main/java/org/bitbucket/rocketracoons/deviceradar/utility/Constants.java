@@ -13,4 +13,6 @@ public class Constants {
             Arrays.asList(ConnectivityManager.TYPE_MOBILE, ConnectivityManager.TYPE_WIFI);
 
     public static final String URL = "http://10.168.1.90:8080/api";
+
+    public static final boolean DEBUG_MODE = true;
 }
