@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/DeviceRadar.iml" filepath="$PROJECT_DIR$/DeviceRadar.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/deviceradar.iml" filepath="$PROJECT_DIR$/deviceradar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/deviceradar.iml" filepath="$PROJECT_DIR$/deviceradar.iml" />
     </modules>
   </component>
 </project>

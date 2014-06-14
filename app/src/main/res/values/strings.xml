@@ -4,5 +4,16 @@
     <string name="app_name">DeviceRadar</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="searchFieldHint">Search</string>
+    <string name="startSearchButtonTitle">Go</string>
+    <string name="title_activity_device_details">DeviceDetailsActivity</string>
+    <string name="sendMessageButtonTitle">Send Message</string>
+    <string name="title_activity_messages">MessagesActivity</string>
+    <string name="enterMessageHint">Enter message</string>
+    <string name="sendButtonTitle">Send</string>
+    <string name="title_activity_messages_list">MessagesListActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="connectDeviceButtonTitle">Connect Device</string>
+    <string name="disconnectDeviceButtonTitle">Disconnect Device</string>
 
 </resources>
