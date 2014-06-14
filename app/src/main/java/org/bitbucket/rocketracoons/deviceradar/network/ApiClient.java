@@ -3,6 +3,7 @@ package org.bitbucket.rocketracoons.deviceradar.network;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.model.DeviceData;
 import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
+import org.bitbucket.rocketracoons.deviceradar.network.model.RegisterTokenRequest;
 
 import java.util.ArrayList;
 
@@ -22,10 +23,15 @@ public interface ApiClient {
     void getDevicesList(Callback<ArrayList<Device>> callback);
 
     @PUT("/update/{guid}")
-    void updateDeviceData(@Path("guid") String deviceGuid, @Body DeviceData deviceData, Callback<Device> callback);
+    void updateDeviceData(@Path("guid") String deviceGuid, @Body DeviceData deviceData,
+                          Callback<Device> callback);
 
     @POST("/device")
     void registerDevice(@Body ExtendedDeviceData deviceData, Callback<Device> callback);
+
+    @POST("/register/push/{guid}")
+    void registerPushToken(@Path("guid") String guid, @Body String pushId,
+                           Callback<RegisterTokenRequest> callback);
 
     @DELETE("/device/{guid}")
     void unregisterDevice(@Path("guid") String deviceGuid, Callback<Device> callback);
