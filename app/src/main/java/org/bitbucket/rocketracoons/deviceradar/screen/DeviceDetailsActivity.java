@@ -8,12 +8,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.bitbucket.rocketracoons.deviceradar.R;
+import org.bitbucket.rocketracoons.deviceradar.model.Device;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class DeviceDetailsActivity extends Activity {
+    public static String DEVICE_EXTRA_NAME = "DEVICE_EXTRA_NAME";
     @InjectView(R.id.titleTextView)
     TextView titleTextView;
     @InjectView(R.id.descriptionTextView)
@@ -21,13 +23,19 @@ public class DeviceDetailsActivity extends Activity {
     @InjectView(R.id.sendMessageButton)
     Button sendMessageButton;
 
+    Device device;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_details);
         ButterKnife.inject(this);
-    }
 
+        Bundle intentBundle = getIntent().getExtras();
+        if (intentBundle != null) {
+            device = intentBundle.getSerializable(DEVICE_EXTRA_NAME);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
