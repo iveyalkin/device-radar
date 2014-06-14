@@ -73,12 +73,13 @@ public class TrackerService extends IntentService {
     }
 
     private void collectCompleteDeviceInformation() {
-        final ExtendedDeviceData device = new ExtendedDeviceData();
+        final ExtendedDeviceData device = new ExtendedDeviceData("", "", "", 0l, 0l, "", "", "", 0,
+                0, false, "");
         registerDevice(device);
     }
 
     private void collectShortDeviceInformation() {
-        final DeviceData device = new DeviceData();
+        final DeviceData device = new DeviceData("", "", "", 0l, 0l, "", "", "");
         updateDevicceData(device);
     }
 
