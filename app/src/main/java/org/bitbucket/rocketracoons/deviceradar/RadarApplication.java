@@ -51,7 +51,7 @@ public class RadarApplication extends Application {
         tryRegisterDevice();
     }
 
-    private void tryRegisterDevice() {
+    public void tryRegisterDevice() {
         if (GcmSupportedType.SUPPORTED == checkGooglePlayServices()) {
             final String registrationId = getRegistrationId();
 

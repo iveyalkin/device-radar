@@ -87,7 +87,7 @@ public class MainActivity extends Activity {
         GcmSupportedType gcmSupportedType = RadarApplication.instance.checkGooglePlayServices();
         switch (gcmSupportedType) {
             case SUPPORTED:
-                googlePlayServicesEnabled();
+                requestDeviceList();
                 break;
             case SUPPORTED_BUT_USER: {
                 final int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
@@ -99,10 +99,6 @@ public class MainActivity extends Activity {
                 finish();
                 break;
         }
-    }
-
-    private void googlePlayServicesEnabled() {
-        requestDeviceList();
     }
 
     private void requestDeviceList() {
@@ -205,7 +201,8 @@ public class MainActivity extends Activity {
              */
                 switch (resultCode) {
                 case Activity.RESULT_OK:
-                    tryGooglePlayServices();
+                    RadarApplication.instance.tryRegisterDevice();
+                    requestDeviceList();
                     break;
                 default:
                     Toast.makeText(this, "Oooops, User doesn't whant a GP services...",
