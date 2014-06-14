@@ -31,9 +31,9 @@ public class DataCollector {
     public static ExtendedDeviceData collectCompleteDeviceInformation() {
         Logger.v(TAG, "Collecting complete data");
         WifiInfo wifiInfo = getWifiInfo();
-        
+        double[] coordinates = RadarApplication.instance.getLocation();
         return new ExtendedDeviceData(RadarApplication.instance.getDeviceName(), collectDeviceGUID(),
-                "Android "+ Build.VERSION.RELEASE, 01, 01, wifiInfo.getSSID(),
+                "Android "+ Build.VERSION.RELEASE, (long)coordinates[0], (long)coordinates[1], wifiInfo.getSSID(),
                 wifiInfo.getMacAddress(),
                 RadarApplication.instance.getRegistrationId(),
                 getTotalRAM(), getInternalStorageSpace(),
@@ -42,9 +42,10 @@ public class DataCollector {
 
     public static DeviceData collectShortDeviceInformation() {
         Logger.v(TAG, "Collecting short data");
+        double[] coordinates = RadarApplication.instance.getLocation();
         WifiInfo wifiInfo = getWifiInfo();
         return new DeviceData(RadarApplication.instance.getDeviceName(), collectDeviceGUID(),
-                "Android "+ Build.VERSION.RELEASE, 01, 0l, wifiInfo.getSSID(),
+                "Android "+ Build.VERSION.RELEASE, (long)coordinates[0], (long)coordinates[1], wifiInfo.getSSID(),
                 wifiInfo.getMacAddress(),
                 RadarApplication.instance.getRegistrationId());
     }

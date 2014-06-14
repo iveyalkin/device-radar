@@ -149,7 +149,7 @@ public class MainActivity extends Activity {
 
     @OnClick(R.id.startSearch)
     public void startSearch(Button button) {
-
+        ((DevicesListAdapter)devicesListView.getAdapter()).getFilter().filter(searchField.getText().toString());
     }
 
     @OnItemClick(R.id.listView)

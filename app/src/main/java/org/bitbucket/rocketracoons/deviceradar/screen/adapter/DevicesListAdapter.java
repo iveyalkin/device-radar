@@ -1,15 +1,19 @@
 package org.bitbucket.rocketracoons.deviceradar.screen.adapter;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import org.bitbucket.rocketracoons.deviceradar.R;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -18,16 +22,60 @@ import butterknife.InjectView;
 /**
  * Created by Stenopolz on 14.06.2014.
  */
-public class DevicesListAdapter extends BaseAdapter {
+public class DevicesListAdapter extends BaseAdapter implements Filterable {
         private List<Device> devices;
+        private List<Device> devicesList;
         private final LayoutInflater layoutInflater;
 
         public DevicesListAdapter(Activity context, List<Device> DeviceList) {
             setDevices(DeviceList);
+
             this.layoutInflater = context.getLayoutInflater();
         }
 
-        protected static class ViewHolder {
+    @Override
+    public Filter getFilter() {
+        Filter filter = new Filter() {
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+
+                devices = (List<Device>) results.values;
+                notifyDataSetChanged();
+            }
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+
+                FilterResults results = new FilterResults();
+                List<Device> filteredArray = new ArrayList<Device>();
+
+                // perform your search here using the searchConstraint String.
+
+                constraint = constraint.toString().toLowerCase();
+                if (TextUtils.isEmpty(constraint)) {
+                    filteredArray = devicesList;
+                } else {
+                    for (Device device : devicesList) {
+                        if (device.name.toLowerCase().contains(constraint) ||
+                                device.osVersion.toLowerCase().contains(constraint)) {
+                            filteredArray.add(device);
+                        }
+                    }
+                }
+
+                results.count = filteredArray.size();
+                results.values = filteredArray;
+
+                return results;
+            }
+        };
+
+        return filter;
+    }
+
+    protected static class ViewHolder {
             @InjectView(R.id.titleTextView)
             public TextView titleView;
             @InjectView(R.id.subtitleTextView)
@@ -39,6 +87,7 @@ public class DevicesListAdapter extends BaseAdapter {
 
         public void setDevices(List<Device> devices) {
             this.devices = devices;
+            this.devicesList = devices;
             notifyDataSetChanged();
         }
 
