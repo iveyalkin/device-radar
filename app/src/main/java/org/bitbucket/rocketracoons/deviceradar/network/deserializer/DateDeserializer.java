@@ -26,7 +26,7 @@ public class DateDeserializer implements JsonDeserializer<Date>, JsonSerializer<
         if (json.isJsonPrimitive()) {
             JsonPrimitive primitive = json.getAsJsonPrimitive();
             try {
-                return new Date(primitive.getAsLong() * 1000); // UNIX to millisec
+                return new Date(primitive.getAsLong());
             } catch (NumberFormatException nfe) {
                 Logger.w(TAG, "Failed to parse Date, unexpected JSON primitive: " + primitive);
             }
