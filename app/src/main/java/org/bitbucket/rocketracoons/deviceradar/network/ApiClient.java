@@ -3,12 +3,14 @@ package org.bitbucket.rocketracoons.deviceradar.network;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.model.DeviceData;
 import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
+import org.bitbucket.rocketracoons.deviceradar.network.model.RegisterTokenRequest;
 
 import java.util.ArrayList;
 
 import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.GET;
+import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
 
@@ -24,4 +26,7 @@ public interface ApiClient {
 
     @PUT("/register")
     void registerDevice(@Body ExtendedDeviceData deviceData, Callback<Device> callback);
+
+    @POST("/register/push")
+    void registerPushToken(@Body String pushId, Callback<RegisterTokenRequest> callback);
 }

@@ -1,7 +1,5 @@
 package org.bitbucket.rocketracoons.deviceradar.receiver;
 
-import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;

@@ -13,11 +13,13 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesUtil;
+
 import org.bitbucket.rocketracoons.deviceradar.R;
 import org.bitbucket.rocketracoons.deviceradar.RadarApplication;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
-import org.bitbucket.rocketracoons.deviceradar.network.ApiClient;
 import org.bitbucket.rocketracoons.deviceradar.screen.adapter.DevicesListAdapter;
+import org.bitbucket.rocketracoons.deviceradar.utility.GcmSupportedType;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
 import java.util.ArrayList;
@@ -33,6 +35,10 @@ import retrofit.client.Response;
 
 
 public class MainActivity extends Activity {
+    private static final String TAG = MainActivity.class.getSimpleName();
+
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
     @InjectView(R.id.searchField)
     EditText searchField;
     @InjectView(R.id.startSearch)
@@ -41,7 +47,6 @@ public class MainActivity extends Activity {
     ListView devicesListView;
 
     List<Device> devicesList;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +69,27 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        GcmSupportedType gcmSupportedType = RadarApplication.instancenstance.checkGooglePlayServices();
+        switch (gcmSupportedType) {
+            case SUPPORTED:
+                requestDeviceList();
+                break;
+            case SUPPORTED_BUT_USER: {
+                final int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                break;
+            }
+            case UNSUPPORTED:
+                finish();
+                break;
+        }
+    }
+
+    private void requestDeviceList() {
         setProgressBarVisibility(true);
+
         Utility.getApiClient().getDevicesList(new Callback<ArrayList<Device>>() {
             @Override
             public void success(ArrayList<Device> devices, Response response) {
@@ -80,7 +105,6 @@ public class MainActivity extends Activity {
                 setProgressBarIndeterminateVisibility(false);
             }
         });
-
     }
 
     @Override
