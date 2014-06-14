@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
     protected void onPostResume() {
         super.onPostResume();
 
-        GcmSupportedType gcmSupportedType = RadarApplication.instancenstance.checkGooglePlayServices();
+        GcmSupportedType gcmSupportedType = RadarApplication.instance.checkGooglePlayServices();
         switch (gcmSupportedType) {
             case SUPPORTED:
                 requestDeviceList();

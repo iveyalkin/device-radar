@@ -32,12 +32,12 @@ public class RadarApplication extends Application {
     public static String DEVICE_REGISTERED_PREFERENCE_NAME = "device_registered_preference_name";
     private static final String PROPERTY_APP_VERSION = "appVersion";
 
-    public static RadarApplication instancenstance = null;
+    public static RadarApplication instance = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        instancenstance = this;
+        instance = this;
 
         // Check device for Play Services APK. If check succeeds, proceed with
         //  GCM registration.

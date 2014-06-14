@@ -50,7 +50,7 @@ public class SettingsActivity extends Activity {
     }
 
     private void setupButtons() {
-        if (RadarApplication.instancenstance.isDeviceRegistered()) {
+        if (RadarApplication.instance.isDeviceRegistered()) {
             connectButton.setEnabled(false);
             disconnectButton.setEnabled(true);
         } else {
@@ -101,7 +101,7 @@ public class SettingsActivity extends Activity {
                 // TODO: stub
                 Logger.v(TAG, "Register success for: " + device);
                 Toast.makeText(SettingsActivity.this, "Device successfully registered", Toast.LENGTH_SHORT).show();
-                RadarApplication.instancenstance.setDeviceRegistered(true);
+                RadarApplication.instance.setDeviceRegistered(true);
                 setupButtons();
                 setProgressBarIndeterminateVisibility(false);
             }
@@ -128,7 +128,7 @@ public class SettingsActivity extends Activity {
                 // TODO: stub
                 Logger.v(TAG, "Unregister success");
                 Toast.makeText(SettingsActivity.this, "Device successfully unregistered", Toast.LENGTH_SHORT).show();
-                RadarApplication.instancenstance.setDeviceRegistered(true);
+                RadarApplication.instance.setDeviceRegistered(true);
                 setupButtons();
                 setProgressBarIndeterminateVisibility(false);
             }

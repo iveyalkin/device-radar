@@ -31,12 +31,12 @@ public class DataCollector {
 
     public static String collectDeviceGUID() {
         Logger.v(TAG, "Collecting GUID");
-        return Settings.Secure.getString(RadarApplication.instancenstance.getContentResolver(),
+        return Settings.Secure.getString(RadarApplication.instance.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
     }
 
     private static String getScreenResolution() {
-        WindowManager wm = (WindowManager) RadarApplication.instancenstance.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) RadarApplication.instance.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
