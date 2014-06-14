@@ -12,7 +12,7 @@ import org.bitbucket.rocketracoons.deviceradar.utility.Constants;
 
 public class DeviceStateReceiver extends WakefulBroadcastReceiver {
 
-    public static final int UNDEFINED_TYPE = -1;
+    private static final int UNDEFINED_TYPE = -1;
 
     public DeviceStateReceiver() {
     }
@@ -20,9 +20,7 @@ public class DeviceStateReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (processIntent(intent)) {
-            ComponentName comp = new ComponentName(context.getPackageName(),
-                    TrackerService.class.getName());
-            startWakefulService(context, (intent.setComponent(comp)));
+            startWakefulService(context, TrackerService.getShortCollectingIntent(context));
         }
         setResultCode(Activity.RESULT_OK);
     }
