@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
  *
  */
 public class DeviceData {
+    @SerializedName("name") public String name;
     @SerializedName("guid") public String guid;
     @SerializedName("versionOS") public String osVersion;
     @SerializedName("location") public String location;

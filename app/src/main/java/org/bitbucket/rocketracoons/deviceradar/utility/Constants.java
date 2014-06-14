@@ -11,4 +11,6 @@ import java.util.List;
 public class Constants {
     public static final List<Integer> LISTENING_CONNECTIVITY_EVENTS =
             Arrays.asList(ConnectivityManager.TYPE_MOBILE, ConnectivityManager.TYPE_WIFI);
+
+    public static final String URL = "http://10.168.1.90:8080/api";
 }
