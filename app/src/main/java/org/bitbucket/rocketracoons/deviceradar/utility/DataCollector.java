@@ -34,7 +34,7 @@ public class DataCollector {
         return new ExtendedDeviceData(RadarApplication.instance.getDeviceName(), collectDeviceGUID(),
                 "Android "+ Build.VERSION.RELEASE, 01, 01, wifiInfo.getSSID(),
                 wifiInfo.getMacAddress(),
-                RadarApplication.instance.getRegistrationId(RadarApplication.instance),
+                RadarApplication.instance.getRegistrationId(),
                 getTotalRAM(), getInternalStorageSpace(),
                 hasMobileNetwork(), getScreenResolution());
     }
@@ -45,7 +45,7 @@ public class DataCollector {
         return new DeviceData(RadarApplication.instance.getDeviceName(), collectDeviceGUID(),
                 "Android "+ Build.VERSION.RELEASE, 01, 0l, wifiInfo.getSSID(),
                 wifiInfo.getMacAddress(),
-                RadarApplication.instance.getRegistrationId(RadarApplication.instance));
+                RadarApplication.instance.getRegistrationId());
     }
 
     public static String collectDeviceGUID() {
