@@ -13,7 +13,7 @@ public class Message implements Serializable {
 
     @SerializedName("date") public Date date;
     @SerializedName("author") public String authorName;
-    @SerializedName("type") public Type type;
+    @SerializedName("type") public Type type = Type.INBOUND;
     @SerializedName("text") public String message;
 
     public enum Type {

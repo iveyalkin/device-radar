@@ -10,8 +10,10 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.bitbucket.rocketracoons.deviceradar.model.Message;
 import org.bitbucket.rocketracoons.deviceradar.network.ApiClient;
 import org.bitbucket.rocketracoons.deviceradar.network.deserializer.DateDeserializer;
+import org.bitbucket.rocketracoons.deviceradar.network.deserializer.MessageTypeDeserializer;
 
 import java.util.Date;
 
@@ -33,7 +35,9 @@ public class Utility {
     public static final ApiClient getApiClient() {
         if (null == sApiClientInstance) {
             final Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(Date.class, new DateDeserializer()).create();
+                    .registerTypeAdapter(Date.class, new DateDeserializer())
+                    .registerTypeAdapter(Message.Type.class, new MessageTypeDeserializer())
+                    .create();
 
             final RestAdapter restAdapter = new RestAdapter.Builder()
                     .setEndpoint(Constants.URL)
