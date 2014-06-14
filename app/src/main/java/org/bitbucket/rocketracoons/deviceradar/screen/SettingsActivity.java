@@ -4,19 +4,29 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import org.bitbucket.rocketracoons.deviceradar.R;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * Created by Stenopolz on 14.06.2014.
  */
 public class SettingsActivity extends Activity {
+    @InjectView(R.id.connectButton)
+    Button connectButton;
+    @InjectView(R.id.disconnectButton)
+    Button disconnectButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        ButterKnife.inject(this);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -35,5 +45,15 @@ public class SettingsActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.connectButton)
+    public void connectDevice(Button button) {
+
+    }
+
+    @OnClick(R.id.disconnectButton)
+    public void disconnectDevice(Button button) {
+
     }
 }

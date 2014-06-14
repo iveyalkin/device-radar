@@ -1,6 +1,8 @@
 apply plugin: 'android'
 
 android {
+    signingConfigs {
+    }
     compileSdkVersion 19
     buildToolsVersion '19.1.0'
     defaultConfig {

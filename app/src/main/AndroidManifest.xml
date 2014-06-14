@@ -63,11 +63,11 @@
             android:label="@string/title_activity_messages" >
         </activity>
         <activity
-            android:name=".screen.MessagesActivity.java.MessagesListActivity"
+            android:name=".screen.MessagesListActivity"
             android:label="@string/title_activity_messages_list" >
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".screen.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
     </application>

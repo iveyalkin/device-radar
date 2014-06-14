@@ -4,15 +4,28 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
 
 import org.bitbucket.rocketracoons.deviceradar.R;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
 public class DeviceDetailsActivity extends Activity {
+    @InjectView(R.id.titleTextView)
+    TextView titleTextView;
+    @InjectView(R.id.descriptionTextView)
+    TextView descriptionTextView;
+    @InjectView(R.id.sendMessageButton)
+    Button sendMessageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_details);
+        ButterKnife.inject(this);
     }
 
 
@@ -33,5 +46,10 @@ public class DeviceDetailsActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.sendMessageButton)
+    public void sendMessage(Button button) {
+
     }
 }

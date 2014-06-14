@@ -4,16 +4,26 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import org.bitbucket.rocketracoons.deviceradar.R;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnItemClick;
+
 
 public class MessagesListActivity extends Activity {
+    @InjectView(R.id.listView)
+    ListView messagesListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages_list);
+        ButterKnife.inject(this);
     }
 
 
@@ -34,5 +44,10 @@ public class MessagesListActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnItemClick(R.id.listView)
+    public void onMessageSelected(AdapterView<?> parent, View view, int position, long id) {
+
     }
 }
