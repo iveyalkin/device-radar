@@ -9,6 +9,7 @@ import android.text.TextUtils;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.gson.JsonElement;
 
 import org.bitbucket.rocketracoons.deviceradar.network.model.RegisterTokenRequest;
 import org.bitbucket.rocketracoons.deviceradar.task.GcmRegistrationTask;
@@ -41,8 +42,12 @@ public class RadarApplication extends Application {
 
         // Check device for Play Services APK. If check succeeds, proceed with
         //  GCM registration.
+        tryRegisterDevice();
+    }
+
+    private void tryRegisterDevice() {
         if (GcmSupportedType.SUPPORTED == checkGooglePlayServices()) {
-            final String registrationId = getRegistrationId(getApplicationContext());
+            final String registrationId = getRegistrationId();
 
             if (TextUtils.isEmpty(registrationId)) {
                 registerInBackground();
@@ -75,7 +80,7 @@ public class RadarApplication extends Application {
      * @return registration ID, or empty string if there is no existing
      *         registration ID.
      */
-    public String getRegistrationId(Context context) {
+    public String getRegistrationId() {
         final SharedPreferences prefs = getSharedPreferences();
         String registrationId = prefs.getString(GCM_PROPERTY_REG_ID, "");
         if (TextUtils.isEmpty(registrationId)) {
@@ -127,19 +132,25 @@ public class RadarApplication extends Application {
             @Override
             protected void onPostExecute(final String registrationId) {
                 if (!TextUtils.isEmpty(registrationId)) {
-                    Utility.getApiClient().registerPushToken(getDeviceGuid(), registrationId,
-                            new Callback<RegisterTokenRequest>() {
+                    if (!isDeviceRegistered()) {
+                        Logger.d(TAG, "Device is not registered. Doesn't bother backend");
+                        return;
+                    }
+                    final RegisterTokenRequest request = new RegisterTokenRequest(getDeviceGuid(),
+                            registrationId);
+                    final JsonElement json = Utility.getGsonInstance().toJsonTree(request,
+                            RegisterTokenRequest.class);
+                    Utility.getApiClient().registerPushToken(json, new Callback<String>() {
                         @Override
-                        public void success(RegisterTokenRequest registerTokenRequest,
-                                            Response response) {
-                            if (registerTokenRequest.isSuccess) {
+                        public void success(String result, Response response) {
+//                            if (registerTokenRequest.isSuccess) {
                                 Logger.d(TAG, "Registration GCM token success (our side)");
                                 // Persist the regID - no need to register again.
                                 storeRegistrationId(registrationId);
-                            } else {
+                            /*} else {
                                 Logger.w(TAG, "Registration GCM token failed (our side): " +
                                         registerTokenRequest);
-                            }
+                            }*/
                         }
 
                         @Override
@@ -170,8 +181,16 @@ public class RadarApplication extends Application {
     }
 
     public void setDeviceRegistered(boolean isRegistered) {
+        if (isDeviceRegistered() == isRegistered) {
+            return;
+        }
+
         getSharedPreferences().edit()
                 .putBoolean(DEVICE_REGISTERED_PREFERENCE_NAME, isRegistered)
                 .apply();
+
+        if (isRegistered) {
+            tryRegisterDevice();
+        }
     }
 }
