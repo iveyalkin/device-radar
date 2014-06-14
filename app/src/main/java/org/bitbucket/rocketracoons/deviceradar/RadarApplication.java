@@ -13,6 +13,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import org.bitbucket.rocketracoons.deviceradar.network.model.RegisterTokenRequest;
 import org.bitbucket.rocketracoons.deviceradar.task.GcmRegistrationTask;
 import org.bitbucket.rocketracoons.deviceradar.utility.Constants;
+import org.bitbucket.rocketracoons.deviceradar.utility.DataCollector;
 import org.bitbucket.rocketracoons.deviceradar.utility.GcmSupportedType;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
@@ -152,7 +153,7 @@ public class RadarApplication extends Application {
     }
 
     private String getDeviceGuid() {
-        return "";
+        return DataCollector.collectDeviceGUID();
     }
 
     private void storeRegistrationId(String registrationId) {
