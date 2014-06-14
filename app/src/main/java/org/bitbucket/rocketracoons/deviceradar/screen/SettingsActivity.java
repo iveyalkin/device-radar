@@ -1,7 +1,6 @@
 package org.bitbucket.rocketracoons.deviceradar.screen;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,10 +9,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import org.bitbucket.rocketracoons.deviceradar.R;
+import org.bitbucket.rocketracoons.deviceradar.RadarApplication;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
 import org.bitbucket.rocketracoons.deviceradar.network.ApiClient;
-import org.bitbucket.rocketracoons.deviceradar.utility.Constants;
 import org.bitbucket.rocketracoons.deviceradar.utility.DataCollector;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
@@ -36,16 +35,12 @@ public class SettingsActivity extends Activity {
     @InjectView(R.id.disconnectButton)
     Button disconnectButton;
 
-    boolean isRegistered;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ButterKnife.inject(this);
-        SharedPreferences sPref = getPreferences(MODE_PRIVATE);
-        isRegistered = sPref.getBoolean(Constants.DEVICE_REGISTERED_PREFERENCE_NAME, false);
     }
 
     @Override
@@ -55,7 +50,7 @@ public class SettingsActivity extends Activity {
     }
 
     private void setupButtons() {
-        if (isRegistered) {
+        if (RadarApplication.instancenstance.isDeviceRegistered()) {
             connectButton.setEnabled(false);
             disconnectButton.setEnabled(true);
         } else {
@@ -106,11 +101,7 @@ public class SettingsActivity extends Activity {
                 // TODO: stub
                 Logger.v(TAG, "Register success for: " + device);
                 Toast.makeText(SettingsActivity.this, "Device successfully registered", Toast.LENGTH_SHORT).show();
-                SharedPreferences sPref = getPreferences(MODE_PRIVATE);
-                SharedPreferences.Editor editor = sPref.edit();
-                editor.putBoolean(Constants.DEVICE_REGISTERED_PREFERENCE_NAME, true);
-                editor.apply();
-                isRegistered = true;
+                RadarApplication.instancenstance.setDeviceRegistered(true);
                 setupButtons();
                 setProgressBarIndeterminateVisibility(false);
             }
@@ -137,11 +128,7 @@ public class SettingsActivity extends Activity {
                 // TODO: stub
                 Logger.v(TAG, "Unregister success");
                 Toast.makeText(SettingsActivity.this, "Device successfully unregistered", Toast.LENGTH_SHORT).show();
-                SharedPreferences sPref = getPreferences(MODE_PRIVATE);
-                SharedPreferences.Editor editor = sPref.edit();
-                editor.putBoolean(Constants.DEVICE_REGISTERED_PREFERENCE_NAME, false);
-                editor.apply();
-                isRegistered = true;
+                RadarApplication.instancenstance.setDeviceRegistered(true);
                 setupButtons();
                 setProgressBarIndeterminateVisibility(false);
             }

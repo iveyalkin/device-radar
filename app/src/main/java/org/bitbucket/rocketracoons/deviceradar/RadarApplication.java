@@ -28,6 +28,7 @@ public class RadarApplication extends Application {
     private static final String TAG = RadarApplication.class.getSimpleName();
 
     private static final String GCM_PROPERTY_REG_ID = "gcm_property_reg_id";
+    public static String DEVICE_REGISTERED_PREFERENCE_NAME = "device_registered_preference_name";
     private static final String PROPERTY_APP_VERSION = "appVersion";
 
     public static RadarApplication instancenstance = null;
@@ -125,7 +126,7 @@ public class RadarApplication extends Application {
             @Override
             protected void onPostExecute(final String registrationId) {
                 if (!TextUtils.isEmpty(registrationId)) {
-                    Utility.getApiClient().registerPushToken(registrationId,
+                    Utility.getApiClient().registerPushToken(getDeviceGuid(), registrationId,
                             new Callback<RegisterTokenRequest>() {
                         @Override
                         public void success(RegisterTokenRequest registerTokenRequest,
@@ -150,12 +151,26 @@ public class RadarApplication extends Application {
         }.execute();
     }
 
+    private String getDeviceGuid() {
+        return "";
+    }
+
     private void storeRegistrationId(String registrationId) {
         int appVersion = getAppVersion();
         Logger.i(TAG, "Saving GCM registrationId on app version " + appVersion);
         getSharedPreferences().edit()
                 .putString(GCM_PROPERTY_REG_ID, registrationId)
                 .putInt(PROPERTY_APP_VERSION, appVersion)
+                .apply();
+    }
+
+    public boolean isDeviceRegistered() {
+        return getSharedPreferences().getBoolean(DEVICE_REGISTERED_PREFERENCE_NAME, false);
+    }
+
+    public void setDeviceRegistered(boolean isRegistered) {
+        getSharedPreferences().edit()
+                .putBoolean(DEVICE_REGISTERED_PREFERENCE_NAME, isRegistered)
                 .apply();
     }
 }
