@@ -1,9 +1,8 @@
 package org.bitbucket.rocketracoons.deviceradar.receiver;
 
-import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
@@ -23,10 +22,14 @@ public class DeviceStateReceiver extends WakefulBroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Logger.v(TAG, "Received broadcast: " + intent.getAction());
         //TODO: check isRegistered notify log when not registered
-        if (processIntent(intent)) {
+//        SharedPreferences sPref = null; //getPreferences(MODE_PRIVATE);
+//        boolean isRegistered = sPref.getBoolean(Constants.DEVICE_REGISTERED_PREFERENCE_NAME, false);
+        if (false && processIntent(intent)){
             Logger.v(TAG, "Launch track service");
 
             startWakefulService(context, TrackerService.getShortCollectingIntent(context));
+        } else {
+            Logger.v(TAG, "Device isn't registered. Not updating");
         }
     }
 

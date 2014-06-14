@@ -8,7 +8,9 @@ import java.util.ArrayList;
 
 import retrofit.Callback;
 import retrofit.http.Body;
+import retrofit.http.DELETE;
 import retrofit.http.GET;
+import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
 
@@ -22,6 +24,9 @@ public interface ApiClient {
     @PUT("/update/{guid}")
     void updateDeviceData(@Path("guid") String deviceGuid, @Body DeviceData deviceData, Callback<Device> callback);
 
-    @PUT("/register")
+    @POST("/device")
     void registerDevice(@Body ExtendedDeviceData deviceData, Callback<Device> callback);
+
+    @DELETE("/device/{guid}")
+    void unregisterDevice(@Path("guid") String deviceGuid, Callback<Device> callback);
 }

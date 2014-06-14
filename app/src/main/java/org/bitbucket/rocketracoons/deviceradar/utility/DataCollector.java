@@ -12,14 +12,18 @@ public class DataCollector {
     public static ExtendedDeviceData collectCompleteDeviceInformation() {
         Logger.v(TAG, "Collecting complete data");
 
-        return new ExtendedDeviceData("", "", "", 0l, 0l, "", "", "", 0,
-                0, false, "");
+        return new ExtendedDeviceData("Android-004", collectDeviceGUID(), "dfg", 0l, 0l, "sadfga", "ASDF", "sdf", 1024,
+                15, false, "hdpi");
     }
 
     public static DeviceData collectShortDeviceInformation() {
         Logger.v(TAG, "Collecting short data");
 
-        return new DeviceData("", "", "", 0l, 0l, "", "", "");
+        return new DeviceData("", collectDeviceGUID(), "", 0l, 0l, "", "", "");
+    }
 
+    public static String collectDeviceGUID() {
+        Logger.v(TAG, "Collecting GUID");
+        return "666";
     }
 }

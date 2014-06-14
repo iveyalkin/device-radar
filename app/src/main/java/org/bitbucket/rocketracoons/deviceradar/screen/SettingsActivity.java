@@ -1,22 +1,19 @@
 package org.bitbucket.rocketracoons.deviceradar.screen;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import org.bitbucket.rocketracoons.deviceradar.R;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
 import org.bitbucket.rocketracoons.deviceradar.network.ApiClient;
+import org.bitbucket.rocketracoons.deviceradar.utility.Constants;
 import org.bitbucket.rocketracoons.deviceradar.utility.DataCollector;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
@@ -33,21 +30,22 @@ import retrofit.client.Response;
  */
 public class SettingsActivity extends Activity {
     private static String TAG = SettingsActivity.class.getSimpleName();
-    private static String DEVICE_CONNECTED_NAME = "DEVICE_CONNECTED_NAME";
+
     @InjectView(R.id.connectButton)
     Button connectButton;
     @InjectView(R.id.disconnectButton)
     Button disconnectButton;
 
-    boolean isConnected;
+    boolean isRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ButterKnife.inject(this);
         SharedPreferences sPref = getPreferences(MODE_PRIVATE);
-        isConnected = sPref.getBoolean(DEVICE_CONNECTED_NAME, false);
+        isRegistered = sPref.getBoolean(Constants.DEVICE_REGISTERED_PREFERENCE_NAME, false);
     }
 
     @Override
@@ -57,7 +55,7 @@ public class SettingsActivity extends Activity {
     }
 
     private void setupButtons() {
-        if (isConnected) {
+        if (isRegistered) {
             connectButton.setEnabled(false);
             disconnectButton.setEnabled(true);
         } else {
@@ -95,23 +93,26 @@ public class SettingsActivity extends Activity {
     public void disconnectDevice(Button button) {
         //TODO: unreg the device
         Logger.v(TAG, "Disconnecting device");
+        unregisterDevice();
     }
     private void registerDevice(final ExtendedDeviceData deviceToRegister) {
         Logger.v(TAG, "Registering device: " + deviceToRegister);
 
         final ApiClient apiClient = Utility.getApiClient();
+        setProgressBarIndeterminateVisibility(true);
         apiClient.registerDevice(deviceToRegister, new Callback<Device>() {
             @Override
             public void success(Device device, Response response) {
                 // TODO: stub
                 Logger.v(TAG, "Register success for: " + device);
-                Toast.makeText(SettingsActivity.this, "Device successfully connected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingsActivity.this, "Device successfully registered", Toast.LENGTH_SHORT).show();
                 SharedPreferences sPref = getPreferences(MODE_PRIVATE);
                 SharedPreferences.Editor editor = sPref.edit();
-                editor.putBoolean(DEVICE_CONNECTED_NAME, true);
-                editor.commit();
-                isConnected = true;
+                editor.putBoolean(Constants.DEVICE_REGISTERED_PREFERENCE_NAME, true);
+                editor.apply();
+                isRegistered = true;
                 setupButtons();
+                setProgressBarIndeterminateVisibility(false);
             }
 
             @Override
@@ -120,6 +121,38 @@ public class SettingsActivity extends Activity {
                 Logger.v(TAG, "Register failure for: " + deviceToRegister + " with: "
                         + retrofitError);
                 Toast.makeText(SettingsActivity.this, "An error occurred while registering the device", Toast.LENGTH_SHORT).show();
+                setProgressBarIndeterminateVisibility(false);
+            }
+        });
+    }
+
+    private void unregisterDevice(){
+        Logger.v(TAG, "Unregistering device");
+
+        final ApiClient apiClient = Utility.getApiClient();
+        setProgressBarIndeterminateVisibility(true);
+        apiClient.unregisterDevice(DataCollector.collectDeviceGUID(), new Callback<Device>() {
+            @Override
+            public void success(Device device, Response response) {
+                // TODO: stub
+                Logger.v(TAG, "Unregister success");
+                Toast.makeText(SettingsActivity.this, "Device successfully unregistered", Toast.LENGTH_SHORT).show();
+                SharedPreferences sPref = getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor editor = sPref.edit();
+                editor.putBoolean(Constants.DEVICE_REGISTERED_PREFERENCE_NAME, false);
+                editor.apply();
+                isRegistered = true;
+                setupButtons();
+                setProgressBarIndeterminateVisibility(false);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                // TODO: stub
+                Logger.v(TAG, "Register failure with: "
+                        + retrofitError);
+                Toast.makeText(SettingsActivity.this, "An error occurred while unregistering the device", Toast.LENGTH_SHORT).show();
+                setProgressBarIndeterminateVisibility(false);
             }
         });
     }
