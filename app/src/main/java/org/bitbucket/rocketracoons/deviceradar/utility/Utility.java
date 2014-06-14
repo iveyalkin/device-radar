@@ -19,6 +19,8 @@ import retrofit.converter.GsonConverter;
  * Created by Igor.Veyalkin on 14.06.2014.
  */
 public class Utility {
+    private static final String TAG = Utility.class.getSimpleName();
+
     public static final WifiInfo getWifiInfo(Context context) {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         return wifiManager.getConnectionInfo();
@@ -33,6 +35,8 @@ public class Utility {
             final RestAdapter restAdapter = new RestAdapter.Builder()
                     .setEndpoint(Constants.URL)
                     .setConverter(new GsonConverter(gson))
+                    .setLog(new Logger.Retrofit())
+                    .setLogLevel(RestAdapter.LogLevel.FULL)
                     .build();
             sApiClientInstance = restAdapter.create(ApiClient.class);
         }
