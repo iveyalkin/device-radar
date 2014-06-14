@@ -30,6 +30,7 @@ public class RadarApplication extends Application {
 
     private static final String GCM_PROPERTY_REG_ID = "gcm_property_reg_id";
     public static String DEVICE_REGISTERED_PREFERENCE_NAME = "device_registered_preference_name";
+    public static String DEVICE_NAME_PREFERENCE_NAME = "device_name_preference_name";
     private static final String PROPERTY_APP_VERSION = "appVersion";
 
     public static RadarApplication instance = null;
@@ -173,5 +174,15 @@ public class RadarApplication extends Application {
         getSharedPreferences().edit()
                 .putBoolean(DEVICE_REGISTERED_PREFERENCE_NAME, isRegistered)
                 .apply();
+    }
+
+    public void setDeviceName(String name) {
+        getSharedPreferences().edit()
+                .putString(DEVICE_NAME_PREFERENCE_NAME, name)
+                .apply();
+    }
+
+    public String getDeviceName() {
+        return getSharedPreferences().getString(DEVICE_NAME_PREFERENCE_NAME, "Unknown");
     }
 }

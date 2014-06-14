@@ -73,7 +73,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        DataCollector.getTotalRAM();
         GcmSupportedType gcmSupportedType = RadarApplication.instance.checkGooglePlayServices();
         switch (gcmSupportedType) {
             case SUPPORTED:
@@ -93,7 +92,6 @@ public class MainActivity extends Activity {
 
     private void requestDeviceList() {
         setProgressBarVisibility(true);
-
         Utility.getApiClient().getDevicesList(new Callback<ArrayList<Device>>() {
             @Override
             public void success(ArrayList<Device> devices, Response response) {

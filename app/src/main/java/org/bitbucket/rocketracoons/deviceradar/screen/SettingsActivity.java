@@ -1,11 +1,18 @@
 package org.bitbucket.rocketracoons.deviceradar.screen;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import org.bitbucket.rocketracoons.deviceradar.R;
@@ -81,7 +88,7 @@ public class SettingsActivity extends Activity {
     @OnClick(R.id.connectButton)
     public void connectDevice(Button button) {
         Logger.v(TAG, "Connecting device");
-        registerDevice(DataCollector.collectCompleteDeviceInformation());
+
     }
 
     @OnClick(R.id.disconnectButton)
@@ -137,6 +144,44 @@ public class SettingsActivity extends Activity {
                 setProgressBarIndeterminateVisibility(false);
             }
         });
+    }
+
+    private void showLoginPrompt() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+        // Setting Dialog Title
+        alertDialog.setTitle("Device Name");
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.view_device_name_dialog, null);
+        final EditText name = (EditText) view.findViewById(R.id.deviceNameField);
+        alertDialog.setView(view);
+
+        // Setting Positive Button
+        alertDialog.setPositiveButton("Register",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String deviceName = name.getText().toString();
+                        if (!TextUtils.isEmpty(deviceName)) {
+                            RadarApplication.instance.setDeviceName(deviceName);
+                            registerDevice(DataCollector.collectCompleteDeviceInformation());
+                        } else {
+                            Toast.makeText(SettingsActivity.this, "Device name cannot be empty", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+        );
+        // Setting Negative Button
+        alertDialog.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to execute after dialog
+                        dialog.dismiss();
+                    }
+                }
+        );
+        // Showing Alert Message
+        alertDialog.show();
     }
 
 }

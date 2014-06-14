@@ -73,8 +73,10 @@ public class DeviceDetailsActivity extends Activity {
 
             stringBuilder.append("Internal Memory: ");
             stringBuilder.append(device.memoryAmount);
-            stringBuilder.append(" Mb");
+            stringBuilder.append(" Gb");
             stringBuilder.append('\n');
+
+            descriptionTextView.setText(stringBuilder.toString());
         }
     }
 

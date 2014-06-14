@@ -2,6 +2,11 @@ package org.bitbucket.rocketracoons.deviceradar.utility;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings;
@@ -14,7 +19,6 @@ import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,18 +30,20 @@ public class DataCollector {
 
     public static ExtendedDeviceData collectCompleteDeviceInformation() {
         Logger.v(TAG, "Collecting complete data");
-
-        return new ExtendedDeviceData("Android-004", collectDeviceGUID(), "dfg", 01, 01, "sadfga", "ASDF", "sdf", getTotalRAM(), getInternalStorageSpace(), false, getScreenResolution());
+        WifiInfo wifiInfo = getWifiInfo();
+        return new ExtendedDeviceData(RadarApplication.instance.getDeviceName(), collectDeviceGUID(),
+                "Android "+ Build.VERSION.RELEASE, 01, 01, wifiInfo.getSSID(),
+                wifiInfo.getMacAddress(), "pushToken", getTotalRAM(), getInternalStorageSpace(),
+                hasMobileNetwork(), getScreenResolution());
     }
 
     public static DeviceData collectShortDeviceInformation() {
         Logger.v(TAG, "Collecting short data");
-
-        return new DeviceData("Android-004", collectDeviceGUID(), "", 01, 0l, "", "", "");
+        WifiInfo wifiInfo = getWifiInfo();
+        return new DeviceData(RadarApplication.instance.getDeviceName(), collectDeviceGUID(), "Android "+ Build.VERSION.RELEASE, 01, 0l, wifiInfo.getSSID(), wifiInfo.getMacAddress(), "pushToken");
     }
 
     public static String collectDeviceGUID() {
-        Logger.v(TAG, "Collecting GUID");
         return Settings.Secure.getString(RadarApplication.instance.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
     }
@@ -50,12 +56,10 @@ public class DataCollector {
         return String.valueOf(size.x) + "x" + String.valueOf(size.y);
     }
 
-    public static int getTotalRAM() {
-
-        RandomAccessFile reader = null;
-        String load = null;
-        DecimalFormat twoDecimalForm = new DecimalFormat("#.##");
-        double totRam = 0;
+    private static int getTotalRAM() {
+        RandomAccessFile reader;
+        String load;
+        double totRam;
         int lastValue = 0;
         try {
             reader = new RandomAccessFile("/proc/meminfo", "r");
@@ -67,15 +71,13 @@ public class DataCollector {
             String value = "";
             while (m.find()) {
                 value = m.group(1);
-                // System.out.println("Ram : " + value);
             }
             reader.close();
 
             totRam = Double.parseDouble(value);
-            // totRam = totRam / 1024;
 
             double mb = totRam / 1024.0;
-            lastValue = (int)Math.round(mb);
+            lastValue = (int) Math.round(mb);
 
 
         } catch (IOException ex) {
@@ -87,11 +89,20 @@ public class DataCollector {
         return lastValue;
     }
 
-    public static int getInternalStorageSpace()
-    {
+    private static int getInternalStorageSpace() {
         StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
-        //StatFs statFs = new StatFs("/data");
-        long total = ((long)statFs.getBlockCount() * (long)statFs.getBlockSize()) / (1024L*1024L*1024L);
-        return (int)total;
+        long total = ((long) statFs.getBlockCount() * (long) statFs.getBlockSize()) / (1024L * 1024L * 1024L);
+        return (int) total;
+    }
+
+    private static boolean hasMobileNetwork() {
+        ConnectivityManager cm = (ConnectivityManager) RadarApplication.instance.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        return networkInfo.isAvailable();
+    }
+
+    private static WifiInfo getWifiInfo() {
+        WifiManager wifiManager = (WifiManager) RadarApplication.instance.getSystemService(Context.WIFI_SERVICE);
+        return wifiManager.getConnectionInfo();
     }
 }

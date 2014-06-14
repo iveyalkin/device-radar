@@ -26,11 +26,6 @@ import retrofit.converter.GsonConverter;
 public class Utility {
     private static final String TAG = Utility.class.getSimpleName();
 
-    public static final WifiInfo getWifiInfo(Context context) {
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        return wifiManager.getConnectionInfo();
-    }
-
     private static ApiClient sApiClientInstance = null;
     public static final ApiClient getApiClient() {
         if (null == sApiClientInstance) {
