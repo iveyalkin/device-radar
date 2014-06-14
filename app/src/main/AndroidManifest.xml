@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.bitbucket.rocketracoons.deviceradar" >
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> // TODO: do we need that?
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
