@@ -31,6 +31,7 @@ public class DataCollector {
     public static ExtendedDeviceData collectCompleteDeviceInformation() {
         Logger.v(TAG, "Collecting complete data");
         WifiInfo wifiInfo = getWifiInfo();
+        
         return new ExtendedDeviceData(RadarApplication.instance.getDeviceName(), collectDeviceGUID(),
                 "Android "+ Build.VERSION.RELEASE, 01, 01, wifiInfo.getSSID(),
                 wifiInfo.getMacAddress(),
