@@ -8,5 +8,9 @@ import com.google.gson.annotations.SerializedName;
 public class Device extends ExtendedDeviceData {
     private static final long serialVersionUID = -1886750723800451640L;
 
-    @SerializedName("date") public String updateDate;
+    @SerializedName("date") public long updateDate;
+
+    protected Device() {
+        super();
+    }
 }

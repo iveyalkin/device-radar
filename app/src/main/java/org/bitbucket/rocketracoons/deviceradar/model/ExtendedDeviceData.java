@@ -8,8 +8,31 @@ import com.google.gson.annotations.SerializedName;
 public class ExtendedDeviceData extends DeviceData {
     private static final long serialVersionUID = 6365263726585438753L;
 
-    @SerializedName("ram") public String ramAmount;
-    @SerializedName("internalMemory") public String memoryAmount;
+    @SerializedName("ram") public int ramAmount;
+    @SerializedName("internalMemory") public int memoryAmount;
     @SerializedName("gsm") public Boolean gsmModule;
     @SerializedName("screen") public String screen;
+
+    protected ExtendedDeviceData() {
+        super();
+    }
+
+    public ExtendedDeviceData(String name,
+                              String guid,
+                              String osVersion,
+                              long longitude,
+                              long latitude,
+                              String ssid,
+                              String macAddress,
+                              String pushToken,
+                              int ramAmount,
+                              int memoryAmount,
+                              Boolean gsmModule,
+                              String screen) {
+        super(name, guid, osVersion, longitude, latitude, ssid, macAddress, pushToken);
+        this.ramAmount = ramAmount;
+        this.memoryAmount = memoryAmount;
+        this.gsmModule = gsmModule;
+        this.screen = screen;
+    }
 }
