@@ -27,13 +27,13 @@ public class DataCollector {
     public static ExtendedDeviceData collectCompleteDeviceInformation() {
         Logger.v(TAG, "Collecting complete data");
 
-        return new ExtendedDeviceData("Android-004", collectDeviceGUID(), "dfg", 01, 01, "sadfga", "ASDF", "sdf", getTotalRAM(), getInternalStorageSpace(), false, "hdpi");
+        return new ExtendedDeviceData("Android-004", collectDeviceGUID(), "dfg", 01, 01, "sadfga", "ASDF", "sdf", getTotalRAM(), getInternalStorageSpace(), false, getScreenResolution());
     }
 
     public static DeviceData collectShortDeviceInformation() {
         Logger.v(TAG, "Collecting short data");
 
-        return new DeviceData("", collectDeviceGUID(), "", 01, 0l, "", "", "");
+        return new DeviceData("Android-004", collectDeviceGUID(), "", 01, 0l, "", "", "");
     }
 
     public static String collectDeviceGUID() {
@@ -91,7 +91,7 @@ public class DataCollector {
     {
         StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
         //StatFs statFs = new StatFs("/data");
-        long total = ((long)statFs.getBlockCount() * (long)statFs.getBlockSize()) / 1024*1024*1024;
+        long total = ((long)statFs.getBlockCount() * (long)statFs.getBlockSize()) / (1024L*1024L*1024L);
         return (int)total;
     }
 }

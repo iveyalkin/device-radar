@@ -124,7 +124,7 @@ public class SettingsActivity extends Activity {
             public void success(Device device, Response response) {
                 Logger.v(TAG, "Unregister success");
                 Toast.makeText(SettingsActivity.this, "Device successfully unregistered", Toast.LENGTH_SHORT).show();
-                RadarApplication.instance.setDeviceRegistered(true);
+                RadarApplication.instance.setDeviceRegistered(false);
                 setupButtons();
                 setProgressBarIndeterminateVisibility(false);
             }
