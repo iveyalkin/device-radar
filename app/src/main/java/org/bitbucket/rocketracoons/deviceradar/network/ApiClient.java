@@ -22,11 +22,13 @@ public interface ApiClient {
     void getDevicesList(Callback<ArrayList<Device>> callback);
 
     @PUT("/update/{guid}")
-    void updateDeviceData(@Path("guid") String deviceGuid, @Body DeviceData deviceData, Callback<Device> callback);
+    void updateDeviceData(@Path("guid") String deviceGuid, @Body DeviceData deviceData,
+                          Callback<Device> callback);
 
     @PUT("/register")
     void registerDevice(@Body ExtendedDeviceData deviceData, Callback<Device> callback);
 
-    @POST("/register/push")
-    void registerPushToken(@Body String pushId, Callback<RegisterTokenRequest> callback);
+    @POST("/register/push/{guid}")
+    void registerPushToken(@Path("guid") String guid, @Body String pushId,
+                           Callback<RegisterTokenRequest> callback);
 }

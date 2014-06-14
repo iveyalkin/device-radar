@@ -8,12 +8,10 @@ import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.model.DeviceData;
 import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
 import org.bitbucket.rocketracoons.deviceradar.network.ApiClient;
-import org.bitbucket.rocketracoons.deviceradar.utility.Constants;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 

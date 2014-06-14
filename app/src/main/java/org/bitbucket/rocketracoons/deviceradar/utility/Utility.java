@@ -45,4 +45,14 @@ public class Utility {
         }
         return sApiClientInstance;
     }
+
+    private static Gson sGsonInstance = null;
+    public static Gson getGsonInstance() {
+        if (null == sGsonInstance) {
+            sGsonInstance = new GsonBuilder()
+                    .registerTypeAdapter(Date.class, new DateDeserializer())
+                    .create();
+        }
+        return sGsonInstance;
+    }
 }

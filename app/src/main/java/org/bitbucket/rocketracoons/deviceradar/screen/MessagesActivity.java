@@ -19,6 +19,10 @@ import butterknife.OnItemClick;
 
 
 public class MessagesActivity extends Activity {
+    public static final String ARG_MESSAGE =
+            MessagesActivity.class.getPackage().getName() + MessagesActivity.class.getSimpleName()
+            + ".argument.message";
+
     @InjectView(R.id.listView)
     ListView messagesListView;
     @InjectView(R.id.messageTextField)
