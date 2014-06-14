@@ -4,6 +4,17 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
 
+import org.bitbucket.rocketracoons.deviceradar.model.Device;
+import org.bitbucket.rocketracoons.deviceradar.model.DeviceData;
+import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
+import org.bitbucket.rocketracoons.deviceradar.network.ApiClient;
+import org.bitbucket.rocketracoons.deviceradar.utility.Constants;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
@@ -15,6 +26,8 @@ public class TrackerService extends IntentService {
             "org.bitbucket.rocketracoons.deviceradar.action.COLLECT_SHORT";
     private static final String ACTION_COLLECT_COMPLETE =
             "org.bitbucket.rocketracoons.deviceradar.action.COLLECT_COMPLETE";
+
+    private final ApiClient apiClient;
 
     /**
      * Starts this service to perform action Foo with the given parameters. If
@@ -44,6 +57,11 @@ public class TrackerService extends IntentService {
 
     public TrackerService() {
         super(TrackerService.class.getSimpleName());
+        final RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(Constants.URL)
+                .build();
+
+        apiClient = restAdapter.create(ApiClient.class);
     }
 
     @Override
@@ -61,10 +79,40 @@ public class TrackerService extends IntentService {
     }
 
     private void collectCompleteDeviceInformation() {
-
+        final ExtendedDeviceData device = new ExtendedDeviceData();
+        registerDevice(device);
     }
 
     private void collectShortDeviceInformation() {
+        final DeviceData device = new DeviceData();
+        updateDevicceData(device);
+    }
 
+    private void registerDevice(ExtendedDeviceData device) {
+        apiClient.registerDevice(device, new Callback<Device>() {
+            @Override
+            public void success(Device device, Response response) {
+                // TODO: stub
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                // TODO: stub
+            }
+        });
+    }
+
+    private void updateDevicceData(DeviceData data) {
+        apiClient.updateDeviceData(data.guid, data, new Callback<Device>() {
+            @Override
+            public void success(Device device, Response response) {
+                // TODO: stub
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                // TODO: stub
+            }
+        });
     }
 }
