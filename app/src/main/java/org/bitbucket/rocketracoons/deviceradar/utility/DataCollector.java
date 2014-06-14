@@ -1,5 +1,12 @@
 package org.bitbucket.rocketracoons.deviceradar.utility;
 
+import android.content.Context;
+import android.graphics.Point;
+import android.provider.Settings;
+import android.view.Display;
+import android.view.WindowManager;
+
+import org.bitbucket.rocketracoons.deviceradar.RadarApplication;
 import org.bitbucket.rocketracoons.deviceradar.model.DeviceData;
 import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
 
@@ -24,6 +31,15 @@ public class DataCollector {
 
     public static String collectDeviceGUID() {
         Logger.v(TAG, "Collecting GUID");
-        return "666";
+        return Settings.Secure.getString(RadarApplication.instancenstance.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+    }
+
+    private static String getScreenResolution() {
+        WindowManager wm = (WindowManager) RadarApplication.instancenstance.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return String.valueOf(size.x) + "x" + String.valueOf(size.y);
     }
 }
