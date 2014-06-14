@@ -1,7 +1,6 @@
 package org.bitbucket.rocketracoons.deviceradar.service;
 
 import android.app.IntentService;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.Context;
 
@@ -64,6 +63,7 @@ public class TrackerService extends IntentService {
     private void collectCompleteDeviceInformation() {
 
     }
+
     private void collectShortDeviceInformation() {
 
     }
