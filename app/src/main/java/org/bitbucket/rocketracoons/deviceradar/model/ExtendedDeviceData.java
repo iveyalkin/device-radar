@@ -30,7 +30,7 @@ public class ExtendedDeviceData extends DeviceData {
                               int memoryAmount,
                               Boolean gsmModule,
                               String screen) {
-        super(name, guid, osVersion, longitude, latitude, ssid, macAddress, pushToken);
+        super(name, guid, osVersion, latitude, longitude, ssid, macAddress, pushToken);
         this.ramAmount = ramAmount;
         this.memoryAmount = memoryAmount;
         this.gsmModule = gsmModule;
