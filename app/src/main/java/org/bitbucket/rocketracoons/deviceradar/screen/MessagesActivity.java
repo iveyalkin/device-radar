@@ -53,6 +53,7 @@ public class MessagesActivity extends Activity {
             threadAuthorId = extras.getString(ARG_AUTHOR_ID);
             Logger.w(TAG, "Show thread with authorId: " + threadAuthorId);
             adapter = new MessagesListAdapter(this, MessageProvider.getMessages(threadAuthorId));
+            messagesListView.setAdapter(adapter);
         } else {
             Logger.w(TAG, "Nothing to show");
             finish();

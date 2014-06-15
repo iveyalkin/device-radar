@@ -30,6 +30,7 @@ public class MessagesListActivity extends Activity {
         ButterKnife.inject(this);
 
         adapter = new MessagesRecipientsListAdapter(this, MessageProvider.getStats());
+        messagesListView.setAdapter(adapter);
     }
 
 
