@@ -150,8 +150,8 @@ public class SettingsActivity extends Activity {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
         // Setting Dialog Title
-        alertDialog.setTitle("Device Name");
-
+//        alertDialog.setTitle("Device Name");
+        alertDialog.setMessage("Enter non-empty device name");
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.view_device_name_dialog, null);
         final EditText name = (EditText) view.findViewById(R.id.deviceNameField);

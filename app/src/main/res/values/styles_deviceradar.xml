@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- File created by the Android Action Bar Style Generator
+
+     Copyright (C) 2011 The Android Open Source Project
+     Copyright (C) 2012 readyState Software Ltd
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <style name="Theme.Deviceradar" parent="@android:style/Theme.Holo">
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_deviceradar</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.Deviceradar</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Deviceradar</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Deviceradar</item>
+        <item name="android:actionDropDownStyle">@style/DropDownNav.Deviceradar</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Deviceradar</item>
+        <item name="android:actionModeBackground">@drawable/cab_background_top_deviceradar</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_deviceradar</item>
+        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Deviceradar</item>
+        <item name="android:editTextBackground">@drawable/deviceradar_edit_text_holo_dark</item>
+
+        <item name="android:textColorHighlight">#99d91e00</item>
+        <item name="android:textSelectHandleLeft">@drawable/deviceradar_text_select_handle_left</item>
+        <item name="android:textSelectHandleRight">@drawable/deviceradar_text_select_handle_right</item>
+        <item name="android:textSelectHandle">@drawable/deviceradar_text_select_handle_middle</item>
+        <item name="android:buttonStyle">@style/ButtonDeviceRadar</item>
+        <item name="android:imageButtonStyle">@style/ImageButtonDeviceRadar</item>
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBarDeviceRadar</item>
+        <item name="android:listChoiceBackgroundIndicator">@drawable/deviceradar_list_selector_holo_dark</item>
+        <item name="android:activatedBackgroundIndicator">@drawable/deviceradar_activated_background_holo_dark</item>
+        <item name="android:fastScrollThumbDrawable">@drawable/deviceradar_fastscroll_thumb_holo</item>
+        
+    </style>
+
+    <style name="ActionBar.Solid.Deviceradar" parent="@android:style/Widget.Holo.ActionBar.Solid">
+        <item name="android:background">@drawable/ab_solid_deviceradar</item>
+        <item name="android:backgroundStacked">@drawable/ab_stacked_solid_deviceradar</item>
+        <item name="android:backgroundSplit">@drawable/ab_bottom_solid_deviceradar</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Deviceradar</item>
+    </style>
+
+    <style name="ActionBar.Transparent.Deviceradar" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:background">@drawable/ab_transparent_deviceradar</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Deviceradar</item>
+    </style>
+
+    <style name="PopupMenu.Deviceradar" parent="@android:style/Widget.Holo.ListPopupWindow">
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_deviceradar</item>	
+    </style>
+
+    <style name="DropDownListView.Deviceradar" parent="@android:style/Widget.Holo.ListView.DropDown">
+        <item name="android:listSelector">@drawable/selectable_background_deviceradar</item>
+    </style>
+
+    <style name="ActionBarTabStyle.Deviceradar" parent="@android:style/Widget.Holo.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_indicator_ab_deviceradar</item>
+    </style>
+
+    <style name="DropDownNav.Deviceradar" parent="@android:style/Widget.Holo.Spinner">
+        <item name="android:background">@drawable/spinner_background_ab_deviceradar</item>
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_deviceradar</item>
+        <item name="android:dropDownSelector">@drawable/selectable_background_deviceradar</item>
+    </style>
+    
+    <style name="ProgressBar.Deviceradar" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_deviceradar</item>
+    </style>
+    
+    <style name="ActionButton.CloseMode.Deviceradar" parent="@android:style/Widget.Holo.ActionButton.CloseMode">
+        <item name="android:background">@drawable/btn_cab_done_deviceradar</item>
+    </style>
+
+    <!-- this style is only referenced in a Light.DarkActionBar based theme -->
+    <style name="Theme.Deviceradar.Widget" parent="@android:style/Theme.Holo">
+        <item name="android:popupMenuStyle">@style/PopupMenu.Deviceradar</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Deviceradar</item>
+    </style>
+
+    <style name="ButtonDeviceRadar" parent="android:Widget.Holo.Button">
+        <item name="android:background">@drawable/deviceradar_btn_default_holo_dark</item>
+    </style>
+
+    <style name="ImageButtonDeviceRadar" parent="android:Widget.Holo.ImageButton">
+        <item name="android:background">@drawable/deviceradar_btn_default_holo_dark</item>
+    </style>
+
+    <style name="ProgressBarDeviceRadar" parent="android:Widget.Holo.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/deviceradar_progress_horizontal_holo_dark</item>
+        <item name="android:indeterminateDrawable">@drawable/deviceradar_progress_indeterminate_horizontal_holo_dark</item>
+    </style>
+
+</resources>

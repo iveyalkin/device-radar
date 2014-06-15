@@ -3,7 +3,12 @@
     tools:context=".MainActivity" >
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/settings"
         android:orderInCategory="100"
+        android:showAsAction="always" />
+    <item android:id="@+id/action_messages"
+        android:title="@string/action_messages"
+        android:icon="@drawable/message"
+        android:orderInCategory="99"
         android:showAsAction="always" />
 </menu>

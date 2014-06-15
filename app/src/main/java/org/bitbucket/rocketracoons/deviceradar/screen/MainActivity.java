@@ -139,6 +139,10 @@ public class MainActivity extends Activity {
         if (id == R.id.action_settings) {
             showLoginPrompt();
             return true;
+        } else if(id == R.id.action_messages) {
+            Intent intent = new Intent(this, MessagesListActivity.class);
+            startActivity(intent);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -160,7 +164,7 @@ public class MainActivity extends Activity {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
         // Setting Dialog Title
-        alertDialog.setTitle("Password");
+//        alertDialog.setTitle("Password");
 
         // Setting Dialog Message
         alertDialog.setMessage("Login, please");
