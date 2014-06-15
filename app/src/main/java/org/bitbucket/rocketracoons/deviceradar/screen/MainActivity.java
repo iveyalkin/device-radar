@@ -88,6 +88,13 @@ public class MainActivity extends Activity {
         super.onPostResume();
 
         tryGooglePlayServices();
+
+        String deviceName = RadarApplication.instance.getDeviceName();
+        if (!TextUtils.isEmpty(deviceName)) {
+            getActionBar().setTitle(deviceName);
+        } else {
+            getActionBar().setTitle(R.string.app_name);
+        }
     }
 
     private void tryGooglePlayServices() {
