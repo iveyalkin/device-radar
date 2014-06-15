@@ -147,18 +147,16 @@ public class RadarApplication extends Application {
                     Utility.getApiClient().registerPushToken(request, new Callback<Object>() {
                         @Override
                         public void success(Object result, Response response) {
-//                            if (registerTokenRequest.isSuccess) {
-                                Logger.d(TAG, "Registration GCM token success (our side)");
-                                // Persist the regID - no need to register again.
-                                storeRegistrationId(registrationId);
-                            /*} else {
-                                Logger.w(TAG, "Registration GCM token failed (our side): " +
-                                        registerTokenRequest);
-                            }*/
+                            Logger.d(TAG, "Registration GCM token success (our side)");
+                            storeRegistrationId(registrationId);
                         }
 
                         @Override
                         public void failure(RetrofitError retrofitError) {
+                            if(retrofitError.toString().contains("java.io.EOFException")){
+                                Utility.getApiClient().registerPushToken(request, this);
+                                return;
+                            }
                             Logger.e(TAG, "Registration token failed (our side)", retrofitError);
                         }
                     });

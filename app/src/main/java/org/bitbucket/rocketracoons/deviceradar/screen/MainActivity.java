@@ -110,6 +110,11 @@ public class MainActivity extends Activity {
 
             @Override
             public void failure(RetrofitError retrofitError) {
+                if(retrofitError.toString().contains("java.io.EOFException")){
+                    Utility.getApiClient().getDevicesList(this);
+                    return;
+                }
+
                 Toast.makeText(MainActivity.this, "Sorry, service is unavailable", Toast.LENGTH_SHORT).show();
                 devicesListView.setAdapter(new DevicesListAdapter(MainActivity.this, null));
                 setProgressBarIndeterminateVisibility(false);
@@ -190,7 +195,7 @@ public class MainActivity extends Activity {
         alertDialog.show();
     }
 
-    private void processLogin(String login, String password) {
+    private void processLogin(final String login, final String password) {
         final ApiClient apiClient = Utility.getApiClient();
         setProgressBarIndeterminateVisibility(true);
         apiClient.auth(new LoginRequest(login, password), new Callback<LoginResponse>() {
@@ -208,6 +213,11 @@ public class MainActivity extends Activity {
 
                 @Override
                 public void failure(RetrofitError retrofitError) {
+                    if(retrofitError.toString().contains("java.io.EOFException")){
+                        apiClient.auth(new LoginRequest(login, password), this);
+                        return;
+                    }
+
                     Logger.v(TAG, "Login failure with: "
                             + retrofitError);
                     Toast.makeText(MainActivity.this, "Can't log in", Toast.LENGTH_SHORT).show();

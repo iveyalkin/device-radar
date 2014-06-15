@@ -61,6 +61,11 @@ public class TrackerService extends IntentService {
 
             @Override
             public void failure(RetrofitError retrofitError) {
+                if(retrofitError.toString().contains("java.io.EOFException")){
+                    apiClient.updateDeviceData(data.guid, data, this);
+                    return;
+                }
+
                 Logger.v(TAG, "Update failure for: " + data + " with: " + retrofitError);
                 WakefulBroadcastReceiver.completeWakefulIntent(intent);
             }

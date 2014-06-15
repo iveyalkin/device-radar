@@ -19,6 +19,7 @@ import org.bitbucket.rocketracoons.deviceradar.RadarApplication;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
 import org.bitbucket.rocketracoons.deviceradar.network.ApiClient;
+import org.bitbucket.rocketracoons.deviceradar.network.model.LoginRequest;
 import org.bitbucket.rocketracoons.deviceradar.utility.DataCollector;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
@@ -113,6 +114,11 @@ public class SettingsActivity extends Activity {
 
             @Override
             public void failure(RetrofitError retrofitError) {
+                if(retrofitError.toString().contains("java.io.EOFException")){
+                    apiClient.registerDevice(deviceToRegister, this);
+                    return;
+                }
+
                 Logger.v(TAG, "Register failure for: " + deviceToRegister + " with: "
                         + retrofitError);
                 Toast.makeText(SettingsActivity.this, "An error occurred while registering the device", Toast.LENGTH_SHORT).show();
@@ -138,6 +144,11 @@ public class SettingsActivity extends Activity {
 
             @Override
             public void failure(RetrofitError retrofitError) {
+                if(retrofitError.toString().contains("java.io.EOFException")){
+                    apiClient.unregisterDevice(DataCollector.collectDeviceGUID(), this);
+                    return;
+                }
+
                 Logger.v(TAG, "Register failure with: "
                         + retrofitError);
                 Toast.makeText(SettingsActivity.this, "An error occurred while unregistering the device", Toast.LENGTH_SHORT).show();

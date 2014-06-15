@@ -118,8 +118,7 @@ public class MessagesActivity extends Activity {
         final String messageText = messageTextField.getText().toString();
         final SendMessageRequest request = new SendMessageRequest(threadAuthorId,
                 messageText, RadarApplication.instance.getDeviceGuid());
-        Utility.getApiClient().sendMessage(request,
-                new Callback<Message>() {
+        Utility.getApiClient().sendMessage(request, new Callback<Message>() {
             @Override
             public void success(Message message, Response response) {
                 Logger.d(TAG, "Message sent successfully. Message: " + message);
@@ -130,6 +129,11 @@ public class MessagesActivity extends Activity {
 
             @Override
             public void failure(RetrofitError retrofitError) {
+                if(retrofitError.toString().contains("java.io.EOFException")){
+                    Utility.getApiClient().sendMessage(request, this);
+                    return;
+                }
+
                 Logger.e(TAG, "Failed to send message. Message: " + messageText, retrofitError);
             }
         });

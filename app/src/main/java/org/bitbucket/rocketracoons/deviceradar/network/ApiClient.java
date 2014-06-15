@@ -38,9 +38,6 @@ public interface ApiClient {
     @POST("/device")
     void registerDevice(@Body ExtendedDeviceData deviceData, Callback<Device> callback);
 
-    @POST("/register")
-    Device registerDevice(@Body ExtendedDeviceData deviceData);
-
     // TODO: something like url encoded
     @POST("/messenger/registration")
     void registerPushToken(@Body RegisterTokenRequest request, Callback<Object> callback);
