@@ -8,16 +8,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.bitbucket.rocketracoons.deviceradar.GcmBroadcastReceiver;
 import org.bitbucket.rocketracoons.deviceradar.MessageProvider;
 import org.bitbucket.rocketracoons.deviceradar.R;
 import org.bitbucket.rocketracoons.deviceradar.screen.adapter.MessagesRecipientsListAdapter;
+
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -46,7 +47,12 @@ public class MessagesListActivity extends Activity {
         setContentView(R.layout.activity_messages_list);
         ButterKnife.inject(this);
 
-        adapter = new MessagesRecipientsListAdapter(this, MessageProvider.getStats());
+        Map<String, Integer> stats = MessageProvider.getStats();
+        if (null == stats || stats.size() == 0) {
+            Toast.makeText(this, "Nothing to show yet", Toast.LENGTH_LONG).show();
+            finish();
+        }
+        adapter = new MessagesRecipientsListAdapter(this, stats);
         messagesListView.setAdapter(adapter);
     }
 
