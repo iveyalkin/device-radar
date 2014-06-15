@@ -29,7 +29,7 @@ public class MessageTypeDeserializer implements JsonDeserializer<Message.Type>,
             JsonPrimitive asJsonPrimitive = jsonElement.getAsJsonPrimitive();
             if (asJsonPrimitive.isString()) {
                 try {
-                    return Message.Type.valueOf(asJsonPrimitive.getAsString());
+                    return Message.Type.valueOf(asJsonPrimitive.getAsString().toUpperCase());
                 } catch (IllegalArgumentException iae) {
                     Logger.e(TAG, "Undefined message type: " + asJsonPrimitive.getAsString(), iae);
                 }
