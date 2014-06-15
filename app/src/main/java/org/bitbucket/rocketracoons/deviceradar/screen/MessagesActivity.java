@@ -4,24 +4,33 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import org.bitbucket.rocketracoons.deviceradar.MessageProvider;
 import org.bitbucket.rocketracoons.deviceradar.R;
+import org.bitbucket.rocketracoons.deviceradar.RadarApplication;
+import org.bitbucket.rocketracoons.deviceradar.model.Message;
+import org.bitbucket.rocketracoons.deviceradar.network.model.SendMessageRequest;
+import org.bitbucket.rocketracoons.deviceradar.screen.adapter.MessagesListAdapter;
+import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
+import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class MessagesActivity extends Activity {
-    public static final String ARG_MESSAGE =
-            MessagesActivity.class.getPackage().getName() + MessagesActivity.class.getSimpleName()
-            + ".argument.message";
+    private static final String TAG = MessagesActivity.class.getSimpleName();
+
+    private static final String PREFIX = MessagesActivity.class.getPackage().getName()
+            + MessagesActivity.class.getSimpleName();
+    public static final String ARG_AUTHOR_ID = PREFIX + ".argument.authorid";
 
     @InjectView(R.id.listView)
     ListView messagesListView;
@@ -30,13 +39,31 @@ public class MessagesActivity extends Activity {
     @InjectView(R.id.sendButton)
     Button sendButton;
 
+    private String threadAuthorId;
+    private MessagesListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages);
         ButterKnife.inject(this);
+
+        Bundle extras = getIntent().getExtras();
+        if (null != extras && extras.containsKey(ARG_AUTHOR_ID)) {
+            threadAuthorId = extras.getString(ARG_AUTHOR_ID);
+            Logger.w(TAG, "Show thread with authorId: " + threadAuthorId);
+            adapter = new MessagesListAdapter(this, MessageProvider.getMessages(threadAuthorId));
+        } else {
+            Logger.w(TAG, "Nothing to show");
+            finish();
+        }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.setMessages(MessageProvider.getMessages(threadAuthorId));
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -59,6 +86,22 @@ public class MessagesActivity extends Activity {
 
     @OnClick(R.id.sendButton)
     public void startSearch(Button button) {
+        final String messageText = messageTextField.getText().toString();
+        final SendMessageRequest request = new SendMessageRequest(threadAuthorId,
+                messageText, RadarApplication.instance.getDeviceGuid());
+        Utility.getApiClient().sendMessage(request,
+                new Callback<Message>() {
+            @Override
+            public void success(Message message, Response response) {
+                Logger.d(TAG, "Message sent successfully. Message: " + message);
+                MessageProvider.addMessage(threadAuthorId, message);
+                adapter.setMessages(MessageProvider.getMessages(threadAuthorId));
+            }
 
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Logger.e(TAG, "Failed to send message. Message: " + messageText, retrofitError);
+            }
+        });
     }
 }

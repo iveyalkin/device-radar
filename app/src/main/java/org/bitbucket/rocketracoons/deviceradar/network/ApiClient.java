@@ -5,6 +5,9 @@ import com.google.gson.JsonElement;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.model.DeviceData;
 import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
+import org.bitbucket.rocketracoons.deviceradar.model.Message;
+import org.bitbucket.rocketracoons.deviceradar.network.model.RegisterTokenRequest;
+import org.bitbucket.rocketracoons.deviceradar.network.model.SendMessageRequest;
 import org.bitbucket.rocketracoons.deviceradar.network.model.LoginRequest;
 import org.bitbucket.rocketracoons.deviceradar.network.model.LoginResponse;
 
@@ -14,7 +17,6 @@ import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.GET;
-import retrofit.http.Headers;
 import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
@@ -30,6 +32,9 @@ public interface ApiClient {
     void updateDeviceData(@Path("guid") String deviceGuid, @Body DeviceData deviceData,
                           Callback<Device> callback);
 
+    @POST("/messenger/send")
+    void sendMessage(@Body SendMessageRequest request, Callback<Message> callback);
+
     @POST("/device")
     void registerDevice(@Body ExtendedDeviceData deviceData, Callback<Device> callback);
 
@@ -37,8 +42,8 @@ public interface ApiClient {
     Device registerDevice(@Body ExtendedDeviceData deviceData);
 
     // TODO: something like url encoded
-    @POST("/messenger")
-    void registerPushToken(@Body JsonElement json, Callback<String> callback);
+    @POST("/messenger/registration")
+    void registerPushToken(@Body RegisterTokenRequest request, Callback<String> callback);
 
     @DELETE("/device/{guid}")
     void unregisterDevice(@Path("guid") String deviceGuid, Callback<Device> callback);
