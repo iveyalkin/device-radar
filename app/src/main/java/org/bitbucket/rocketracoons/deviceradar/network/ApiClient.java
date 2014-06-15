@@ -7,6 +7,7 @@ import org.bitbucket.rocketracoons.deviceradar.model.DeviceData;
 import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
 import org.bitbucket.rocketracoons.deviceradar.model.Message;
 import org.bitbucket.rocketracoons.deviceradar.network.model.RegisterTokenRequest;
+import org.bitbucket.rocketracoons.deviceradar.network.model.SendMessageRequest;
 
 import java.util.ArrayList;
 
@@ -29,8 +30,8 @@ public interface ApiClient {
     void updateDeviceData(@Path("guid") String deviceGuid, @Body DeviceData deviceData,
                           Callback<Device> callback);
 
-    @POST("/message/{guid}")
-    void sendMessage(@Path("guid") String guid, @Body String message, Callback<Message> callback);
+    @POST("/messenger/send")
+    void sendMessage(@Body SendMessageRequest request, Callback<Message> callback);
 
     @POST("/device")
     void registerDevice(@Body ExtendedDeviceData deviceData, Callback<Device> callback);
@@ -39,7 +40,7 @@ public interface ApiClient {
     Device registerDevice(@Body ExtendedDeviceData deviceData);
 
     // TODO: something like url encoded
-    @POST("/messenger")
+    @POST("/messenger/registration")
     void registerPushToken(@Body RegisterTokenRequest request, Callback<String> callback);
 
     @DELETE("/device/{guid}")

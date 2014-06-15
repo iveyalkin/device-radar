@@ -167,7 +167,7 @@ public class RadarApplication extends Application {
         }.execute();
     }
 
-    private String getDeviceGuid() {
+    public String getDeviceGuid() {
         return DataCollector.collectDeviceGUID();
     }
 

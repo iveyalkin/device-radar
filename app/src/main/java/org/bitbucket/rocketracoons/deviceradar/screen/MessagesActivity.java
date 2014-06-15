@@ -10,7 +10,9 @@ import android.widget.ListView;
 
 import org.bitbucket.rocketracoons.deviceradar.MessageProvider;
 import org.bitbucket.rocketracoons.deviceradar.R;
+import org.bitbucket.rocketracoons.deviceradar.RadarApplication;
 import org.bitbucket.rocketracoons.deviceradar.model.Message;
+import org.bitbucket.rocketracoons.deviceradar.network.model.SendMessageRequest;
 import org.bitbucket.rocketracoons.deviceradar.screen.adapter.MessagesListAdapter;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
@@ -85,7 +87,9 @@ public class MessagesActivity extends Activity {
     @OnClick(R.id.sendButton)
     public void startSearch(Button button) {
         final String messageText = messageTextField.getText().toString();
-        Utility.getApiClient().sendMessage(threadAuthorId, messageText,
+        final SendMessageRequest request = new SendMessageRequest(threadAuthorId,
+                messageText, RadarApplication.instance.getDeviceGuid());
+        Utility.getApiClient().sendMessage(request,
                 new Callback<Message>() {
             @Override
             public void success(Message message, Response response) {
