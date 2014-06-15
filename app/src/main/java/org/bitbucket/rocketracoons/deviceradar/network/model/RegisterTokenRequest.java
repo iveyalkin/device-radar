@@ -11,7 +11,7 @@ public class RegisterTokenRequest implements Serializable {
     private static final long serialVersionUID = -5919734431426525558L;
 
     @SerializedName("guid") public String guid;
-    @SerializedName("regId") public String registrationId;
+    @SerializedName("pushToken") public String registrationId;
 
     public RegisterTokenRequest(String guid, String registrationId) {
         this.guid = guid;

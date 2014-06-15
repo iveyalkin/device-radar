@@ -48,6 +48,11 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
     private void proccessGcmMessage(Context context, Bundle gcmMessage) {
         PushNotification pushNotification = Utility.getGsonInstance().fromJson(
                 gcmMessage.getString(GCM_PAYLOAD), PushNotification.class);
+        if (null == pushNotification) {
+            Logger.w(TAG, "Unexpected gcm message");
+            return;
+        }
+        MessageProvider.addMessage(pushNotification.authorId, pushNotification.message);
 
         raiseNotification(context, pushNotification);
     }
@@ -57,7 +62,6 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent messageActivity = new Intent(context, MessagesActivity.class);
-        messageActivity.putExtra(MessagesActivity.ARG_MESSAGE, pushNotification);
         PendingIntent contentIntent = PendingIntent.getActivity(context, REQUEST_CODE,
                 messageActivity, PendingIntent.FLAG_UPDATE_CURRENT);
 

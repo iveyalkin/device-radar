@@ -1,6 +1,7 @@
 package org.bitbucket.rocketracoons.deviceradar.screen;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -35,7 +36,7 @@ public class DeviceDetailsActivity extends Activity {
     @InjectView(R.id.sendMessageButton)
     Button sendMessageButton;
 
-    Device device;
+    private Device device;
 
     @InjectView(R.id.mapview)
     MapView m;
@@ -158,6 +159,8 @@ public class DeviceDetailsActivity extends Activity {
 
     @OnClick(R.id.sendMessageButton)
     public void sendMessage(Button button) {
-
+        final Intent intent = new Intent(getApplicationContext(), MessagesActivity.class);
+        intent.putExtra(MessagesActivity.ARG_AUTHOR_ID, device.guid);
+        startActivity(intent);
     }
 }
