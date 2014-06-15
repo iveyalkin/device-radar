@@ -1,6 +1,7 @@
 package org.bitbucket.rocketracoons.deviceradar.screen.adapter;
 
 import android.app.Activity;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import org.bitbucket.rocketracoons.deviceradar.model.Message;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -21,45 +22,46 @@ import butterknife.InjectView;
 /**
  * Created by Igor.Veyalkin on 15.06.2014.
  */
-public class MessagesListAdapter extends BaseAdapter {
-    private List<Message> messages;
+public class MessagesRecipientsListAdapter extends BaseAdapter {
+    private List<Pair<String, Integer>> recipients;
     private final LayoutInflater layoutInflater;
 
-    public MessagesListAdapter(Activity context, Set<Message> messagesList) {
-        setMessages(messagesList);
+    public MessagesRecipientsListAdapter(Activity context, Map<String, Integer> recipientsList) {
+        setRecipients(recipientsList);
         this.layoutInflater = context.getLayoutInflater();
     }
 
     protected static class ViewHolder {
-        @InjectView(R.id.messageField)
-        public TextView messageField;
-        @InjectView(R.id.authorField)
-        public TextView authorField;
-        @InjectView(R.id.dateField)
-        public TextView dateField;
+        @InjectView(R.id.counterField)
+        public TextView counterField;
+        @InjectView(R.id.recipientField)
+        public TextView recipientField;
+
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }
     }
 
-    public void setMessages(Set<Message> messages) {
-        ArrayList list = new ArrayList(messages.size());
-        list.addAll(messages);
-        this.messages = list;
+    public void setRecipients(Map<String, Integer> recipientsList) {
+        ArrayList<Pair<String, Integer>> list = new ArrayList<Pair<String, Integer>>(recipientsList.size());
+        for (final Map.Entry<String, Integer> entry : recipientsList.entrySet()) {
+            list.add(new Pair<String, Integer>(entry.getKey(), entry.getValue()));
+        }
+        this.recipients = list;
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        if (messages != null) {
-            return messages.size();
+        if (recipients != null) {
+            return recipients.size();
         }
         return 0;
     }
 
     @Override
-    public Message getItem(int position) {
-        return messages.get(position);
+    public Pair<String, Integer> getItem(int position) {
+        return recipients.get(position);
     }
 
     @Override
@@ -72,18 +74,17 @@ public class MessagesListAdapter extends BaseAdapter {
         ViewHolder holder;
         View rowView = convertView;
         if (rowView == null) {
-            rowView = layoutInflater.inflate(R.layout.list_item_message_description, null);
+            rowView = layoutInflater.inflate(R.layout.list_item_recipient_description, null);
             holder = new ViewHolder(rowView);
             rowView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
         }
 
-        final Message message = getItem(position);
+        final Pair<String, Integer> recipient = getItem(position);
 
-        holder.messageField.setText(message.message);
-        holder.authorField.setText(message.authorName);
-        holder.dateField.setText(new SimpleDateFormat().format(message.date));
+        holder.recipientField.setText(recipient.first);
+        holder.counterField.setText(recipient.second);
 
         return rowView;
     }

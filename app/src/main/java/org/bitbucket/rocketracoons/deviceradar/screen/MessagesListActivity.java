@@ -8,8 +8,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import org.bitbucket.rocketracoons.deviceradar.MessageProgider;
+import org.bitbucket.rocketracoons.deviceradar.MessageProvider;
 import org.bitbucket.rocketracoons.deviceradar.R;
+import org.bitbucket.rocketracoons.deviceradar.screen.adapter.MessagesRecipientsListAdapter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -20,11 +21,15 @@ public class MessagesListActivity extends Activity {
     @InjectView(R.id.listView)
     ListView messagesListView;
 
+    private MessagesRecipientsListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages_list);
         ButterKnife.inject(this);
+
+        adapter = new MessagesRecipientsListAdapter(this, MessageProvider.getStats());
     }
 
 
@@ -55,6 +60,6 @@ public class MessagesListActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        MessageProgider.getCollection();
+        MessageProvider.getStats();
     }
 }

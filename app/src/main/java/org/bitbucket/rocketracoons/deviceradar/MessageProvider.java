@@ -5,12 +5,13 @@ import org.bitbucket.rocketracoons.deviceradar.model.Message;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
  * Created by Igor.Veyalkin on 15.06.2014.
  */
-public class MessageProgider {
+public class MessageProvider {
     private static final Map<String, TreeSet<Message>> sMessages =
             new HashMap<String, TreeSet<Message>>();
 
@@ -28,9 +29,11 @@ public class MessageProgider {
         return null != messages ? messages : new TreeSet();
     }
 
-    public static final Map<String, TreeSet<Message>> getCollection() {
-        return sMessages;
+    public static final Map<String, Integer> getStats() {
+        Map<String, Integer> stats = new TreeMap<String, Integer>();
+        for (final Map.Entry<String, TreeSet<Message>> entry : sMessages.entrySet()) {
+            stats.put(entry.getKey(), entry.getValue().size());
+        }
+        return stats;
     }
-
-
 }

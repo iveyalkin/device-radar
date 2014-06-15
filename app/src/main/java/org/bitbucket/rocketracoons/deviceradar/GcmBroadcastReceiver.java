@@ -10,7 +10,6 @@ import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import org.bitbucket.rocketracoons.deviceradar.model.Message;
 import org.bitbucket.rocketracoons.deviceradar.network.model.PushNotification;
 import org.bitbucket.rocketracoons.deviceradar.screen.MessagesActivity;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
@@ -53,7 +52,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
             Logger.w(TAG, "Unexpected gcm message");
             return;
         }
-        MessageProgider.addMessage(pushNotification.authorId, pushNotification.message);
+        MessageProvider.addMessage(pushNotification.authorId, pushNotification.message);
 
         raiseNotification(context, pushNotification);
     }
