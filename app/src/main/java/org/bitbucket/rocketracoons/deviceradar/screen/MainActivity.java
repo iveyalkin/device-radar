@@ -76,7 +76,7 @@ public class MainActivity extends Activity {
                     Filter filter = adapter.getFilter();
                     String constraint = s.toString();
                     filter.filter(constraint);
-                } catch (Exception e) {
+                } catch (NullPointerException e) {
                     Logger.e(TAG, "Almost unhandled error", e);
                 }
             }
