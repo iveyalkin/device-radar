@@ -43,8 +43,10 @@ public class MessagesListAdapter extends BaseAdapter {
     }
 
     public void setMessages(Set<Message> messages) {
-        ArrayList list = new ArrayList(messages.size());
-        list.addAll(messages);
+        ArrayList<Message> list = new ArrayList<Message>(messages.size());
+        for (final Message msg : messages) {
+            list.add(msg);
+        }
         this.messages = list;
         notifyDataSetChanged();
     }
