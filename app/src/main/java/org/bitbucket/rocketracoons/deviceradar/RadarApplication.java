@@ -237,7 +237,8 @@ public class RadarApplication extends Application {
         LocationManager locationManager =
                 (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         ArrayList<Location> locations = new ArrayList<Location>();
-        for (final String provider: locationManager.getAllProviders()) {
+        List<String> providers = locationManager.getAllProviders();
+        for (final String provider: providers) {
             Location location = locationManager.getLastKnownLocation(provider);
             if (null != location) {
                 locations.add(location);
