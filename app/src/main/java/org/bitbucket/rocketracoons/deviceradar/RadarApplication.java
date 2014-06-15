@@ -22,6 +22,7 @@ import org.bitbucket.rocketracoons.deviceradar.utility.GcmSupportedType;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
+import java.io.EOFException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,9 +37,11 @@ public class RadarApplication extends Application {
     private static final String TAG = RadarApplication.class.getSimpleName();
 
     private static final String GCM_PROPERTY_REG_ID = "gcm_property_reg_id";
-    public static String DEVICE_REGISTERED_PREFERENCE_NAME = "device_registered_preference_name";
-    public static String DEVICE_NAME_PREFERENCE_NAME = "device_name_preference_name";
+    private static final String USER_TOKEN = "user_token";
+    public static final String DEVICE_REGISTERED_PREFERENCE_NAME = "device_registered_preference_name";
+    public static final String DEVICE_NAME_PREFERENCE_NAME = "device_name_preference_name";
     private static final String PROPERTY_APP_VERSION = "appVersion";
+    private static final String USER_ROLE = "user_role";
 
     public static RadarApplication instance = null;
 
@@ -154,7 +157,7 @@ public class RadarApplication extends Application {
 
                         @Override
                         public void failure(RetrofitError retrofitError) {
-                            if(retrofitError.toString().contains("java.io.EOFException")){
+                            if(retrofitError.getCause().getClass().equals(EOFException.class)){
                                 Utility.getApiClient().registerPushToken(request, this);
                                 return;
                             }
@@ -205,6 +208,17 @@ public class RadarApplication extends Application {
 
     public String getDeviceName() {
         return getSharedPreferences().getString(DEVICE_NAME_PREFERENCE_NAME, "Unknown");
+    }
+
+    public String getUserToken() {
+        return getSharedPreferences().getString(USER_TOKEN, "");
+    }
+
+    public void setUserToken(String token, String role) {
+        getSharedPreferences().edit()
+                .putString(USER_TOKEN, token)
+                .putString(USER_ROLE, role)
+                .apply();
     }
 
     public double[] getLocation() {

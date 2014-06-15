@@ -24,6 +24,8 @@ import org.bitbucket.rocketracoons.deviceradar.utility.DataCollector;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
+import java.io.EOFException;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -114,7 +116,7 @@ public class SettingsActivity extends Activity {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                if(retrofitError.toString().contains("java.io.EOFException")){
+                if(retrofitError.getCause().getClass().equals(EOFException.class)){
                     apiClient.registerDevice(deviceToRegister, this);
                     return;
                 }
@@ -144,7 +146,7 @@ public class SettingsActivity extends Activity {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                if(retrofitError.toString().contains("java.io.EOFException")){
+                if(retrofitError.getCause().getClass().equals(EOFException.class)){
                     apiClient.unregisterDevice(DataCollector.collectDeviceGUID(), this);
                     return;
                 }

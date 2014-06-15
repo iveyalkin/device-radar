@@ -12,6 +12,8 @@ import org.bitbucket.rocketracoons.deviceradar.utility.DataCollector;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
+import java.io.EOFException;
+
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -61,7 +63,7 @@ public class TrackerService extends IntentService {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                if(retrofitError.toString().contains("java.io.EOFException")){
+                if(retrofitError.getCause().getClass().equals(EOFException.class)){
                     apiClient.updateDeviceData(data.guid, data, this);
                     return;
                 }

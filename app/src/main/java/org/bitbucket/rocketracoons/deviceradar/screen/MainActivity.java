@@ -32,6 +32,7 @@ import org.bitbucket.rocketracoons.deviceradar.utility.GcmSupportedType;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
+import java.io.EOFException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,7 +122,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                if(retrofitError.toString().contains("java.io.EOFException")){
+                if(retrofitError.getCause().getClass().equals(EOFException.class)){
                     Utility.getApiClient().getDevicesList(this);
                     return;
                 }
@@ -205,9 +206,11 @@ public class MainActivity extends Activity {
         final ApiClient apiClient = Utility.getApiClient();
         setProgressBarIndeterminateVisibility(true);
         apiClient.auth(new LoginRequest(login, password), new Callback<LoginResponse>() {
-                            @Override
+                @Override
                 public void success(LoginResponse loginResponse, Response response) {
                     Logger.v(TAG, "Login success for");
+                    RadarApplication.instance.setUserToken(loginResponse.sessionId,
+                            loginResponse.role);
                     if (loginResponse.role.equalsIgnoreCase("admin")) {
                         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                         startActivity(intent);
@@ -219,7 +222,7 @@ public class MainActivity extends Activity {
 
                 @Override
                 public void failure(RetrofitError retrofitError) {
-                    if(retrofitError.toString().contains("java.io.EOFException")){
+                    if(retrofitError.getCause().getClass().equals(EOFException.class)){
                         apiClient.auth(new LoginRequest(login, password), this);
                         return;
                     }

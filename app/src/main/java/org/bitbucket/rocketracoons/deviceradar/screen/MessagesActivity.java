@@ -24,6 +24,8 @@ import org.bitbucket.rocketracoons.deviceradar.screen.adapter.MessagesListAdapte
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
+import java.io.EOFException;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -129,7 +131,7 @@ public class MessagesActivity extends Activity {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                if(retrofitError.toString().contains("java.io.EOFException")){
+                if(retrofitError.getCause().getClass().equals(EOFException.class)){
                     Utility.getApiClient().sendMessage(request, this);
                     return;
                 }
