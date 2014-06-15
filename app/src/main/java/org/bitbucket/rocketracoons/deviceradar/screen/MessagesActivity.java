@@ -3,6 +3,7 @@ package org.bitbucket.rocketracoons.deviceradar.screen;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import org.bitbucket.rocketracoons.deviceradar.R;
 import org.bitbucket.rocketracoons.deviceradar.model.Message;
 import org.bitbucket.rocketracoons.deviceradar.screen.adapter.MessagesListAdapter;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
+import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
 import java.io.Serializable;
 
@@ -23,6 +25,9 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class MessagesActivity extends Activity {
@@ -85,6 +90,20 @@ public class MessagesActivity extends Activity {
 
     @OnClick(R.id.sendButton)
     public void startSearch(Button button) {
+        final String messageText = messageTextField.getText().toString();
+        Utility.getApiClient().sendMessage(threadAuthorId, messageText,
+                new Callback<Message>() {
+            @Override
+            public void success(Message message, Response response) {
+                Logger.d(TAG, "Message sent successfully. Message: " + message);
+                MessageProgider.addMessage(threadAuthorId, message);
+                adapter.setMessages(MessageProgider.getMessages(threadAuthorId));
+            }
 
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Logger.e(TAG, "Failed to send message. Message: " + messageText, retrofitError);
+            }
+        });
     }
 }

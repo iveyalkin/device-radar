@@ -144,9 +144,7 @@ public class RadarApplication extends Application {
                     }
                     final RegisterTokenRequest request = new RegisterTokenRequest(getDeviceGuid(),
                             registrationId);
-                    final JsonElement json = Utility.getGsonInstance().toJsonTree(request,
-                            RegisterTokenRequest.class);
-                    Utility.getApiClient().registerPushToken(json, new Callback<String>() {
+                    Utility.getApiClient().registerPushToken(request, new Callback<String>() {
                         @Override
                         public void success(String result, Response response) {
 //                            if (registerTokenRequest.isSuccess) {

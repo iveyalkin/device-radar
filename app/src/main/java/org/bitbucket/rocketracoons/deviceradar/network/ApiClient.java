@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.model.DeviceData;
 import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
+import org.bitbucket.rocketracoons.deviceradar.model.Message;
+import org.bitbucket.rocketracoons.deviceradar.network.model.RegisterTokenRequest;
 
 import java.util.ArrayList;
 
@@ -27,6 +29,9 @@ public interface ApiClient {
     void updateDeviceData(@Path("guid") String deviceGuid, @Body DeviceData deviceData,
                           Callback<Device> callback);
 
+    @POST("/message/{guid}")
+    void sendMessage(@Path("guid") String guid, @Body String message, Callback<Message> callback);
+
     @POST("/device")
     void registerDevice(@Body ExtendedDeviceData deviceData, Callback<Device> callback);
 
@@ -35,7 +40,7 @@ public interface ApiClient {
 
     // TODO: something like url encoded
     @POST("/messenger")
-    void registerPushToken(@Body JsonElement json, Callback<String> callback);
+    void registerPushToken(@Body RegisterTokenRequest request, Callback<String> callback);
 
     @DELETE("/device/{guid}")
     void unregisterDevice(@Path("guid") String deviceGuid, Callback<Device> callback);

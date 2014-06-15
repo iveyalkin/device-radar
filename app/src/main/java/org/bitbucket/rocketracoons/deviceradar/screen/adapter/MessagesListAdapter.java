@@ -26,9 +26,7 @@ public class MessagesListAdapter extends BaseAdapter {
     private final LayoutInflater layoutInflater;
 
     public MessagesListAdapter(Activity context, Set<Message> messagesList) {
-        ArrayList list = new ArrayList(messagesList.size());
-        list.addAll(messagesList);
-        setMessages(list);
+        setMessages(messagesList);
         this.layoutInflater = context.getLayoutInflater();
     }
 
@@ -44,8 +42,10 @@ public class MessagesListAdapter extends BaseAdapter {
         }
     }
 
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
+    public void setMessages(Set<Message> messages) {
+        ArrayList list = new ArrayList(messages.size());
+        list.addAll(messages);
+        this.messages = list;
         notifyDataSetChanged();
     }
 
