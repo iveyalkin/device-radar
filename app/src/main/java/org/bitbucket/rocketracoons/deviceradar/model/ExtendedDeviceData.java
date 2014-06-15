@@ -12,7 +12,7 @@ public class ExtendedDeviceData extends DeviceData {
     @SerializedName("internalMemory") public int memoryAmount;
     @SerializedName("gsm") public Boolean gsmModule;
     @SerializedName("screen") public String screen;
-    @SerializedName("accessPointName") public String accessPointName;
+
 
     protected ExtendedDeviceData() {
         super();
