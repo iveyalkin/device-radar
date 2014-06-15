@@ -3,10 +3,21 @@ package org.bitbucket.rocketracoons.deviceradar.screen;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.bitbucket.rocketracoons.deviceradar.R;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
@@ -26,12 +37,16 @@ public class DeviceDetailsActivity extends Activity {
 
     Device device;
 
+    @InjectView(R.id.mapview)
+    MapView m;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_details);
         ButterKnife.inject(this);
-
+        m.onCreate(savedInstanceState);
+        
         Bundle intentBundle = getIntent().getExtras();
         if (intentBundle != null) {
             device = (Device) intentBundle.getSerializable(DEVICE_EXTRA_NAME);
@@ -41,6 +56,7 @@ public class DeviceDetailsActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        m.onResume();
         if (device != null) {
             titleTextView.setText(device.name);
 
@@ -77,7 +93,48 @@ public class DeviceDetailsActivity extends Activity {
             stringBuilder.append('\n');
 
             descriptionTextView.setText(stringBuilder.toString());
+
+            if (device.latitude != 0.0 && device.longitude != 0.0) {
+                configureMap(m.getMap(), device.latitude, device.longitude);
+//                m.getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(position, 16));
+            } else {
+                m.setVisibility(View.GONE);
+            }
         }
+    }
+
+    private void
+    configureMap(GoogleMap map, double lat, double lon)
+    {
+        if (map == null)
+            return; // Google Maps not available
+
+            MapsInitializer.initialize(this);
+
+//        map.setMyLocationEnabled(true);
+
+        LatLng latLng = new LatLng(lat, lon);
+        map.addMarker(new MarkerOptions().position(latLng));
+        CameraUpdate camera = CameraUpdateFactory.newLatLngZoom(latLng, (float) 16.0);
+        map.animateCamera(camera);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        m.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        m.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        m.onLowMemory();
     }
 
     @Override

@@ -13,8 +13,8 @@ public class DeviceData implements Serializable {
     @SerializedName("name") public String name;
     @SerializedName("guid") public String guid;
     @SerializedName("versionOS") public String osVersion;
-    @SerializedName("longitude") public long longitude;
-    @SerializedName("latitude") public long latitude;
+    @SerializedName("longitude") public double longitude;
+    @SerializedName("latitude") public double latitude;
     @SerializedName("ssid") public String ssid;
     @SerializedName("mac") public String macAddress;
     @SerializedName("pushToken") public String pushToken;
@@ -25,8 +25,8 @@ public class DeviceData implements Serializable {
     public DeviceData(String name,
                       String guid,
                       String osVersion,
-                      long longitude,
-                      long latitude,
+                      double latitude,
+                      double longitude,
                       String ssid,
                       String macAddress,
                       String pushToken) {

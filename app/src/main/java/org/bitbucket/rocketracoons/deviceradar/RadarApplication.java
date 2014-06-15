@@ -213,16 +213,16 @@ public class RadarApplication extends Application {
     public double[] getLocation() {
         LocationManager locationManager =
                 (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        String bestProvider = locationManager.getBestProvider(criteria, false);
-        Location location = locationManager.getLastKnownLocation(bestProvider);
-        if (null != location) {
-            final double[] coordinates = {location.getLatitude(), location.getLongitude()};
-            Logger.d(TAG, "Found last known location {" + coordinates[0] + "; "
-                    + coordinates[1] + "}");
-            return coordinates;
-        } else {
-            Logger.w(TAG, "Last known location not found");
+        for (final String provider: locationManager.getAllProviders()) {
+            Location location = locationManager.getLastKnownLocation("network");
+            if (null != location) {
+                final double[] coordinates = {location.getLatitude(), location.getLongitude()};
+                Logger.d(TAG, "Found last known location {" + coordinates[0] + "; "
+                        + coordinates[1] + "}");
+                return coordinates;
+            } else {
+                Logger.w(TAG, "Last known location not found for provider " + provider);
+            }
         }
 
         return new double[] {0.0d, 0.0d};
