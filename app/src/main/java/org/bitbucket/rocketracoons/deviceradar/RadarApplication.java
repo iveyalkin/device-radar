@@ -144,9 +144,9 @@ public class RadarApplication extends Application {
                     }
                     final RegisterTokenRequest request = new RegisterTokenRequest(getDeviceGuid(),
                             registrationId);
-                    Utility.getApiClient().registerPushToken(request, new Callback<String>() {
+                    Utility.getApiClient().registerPushToken(request, new Callback<Object>() {
                         @Override
-                        public void success(String result, Response response) {
+                        public void success(Object result, Response response) {
 //                            if (registerTokenRequest.isSuccess) {
                                 Logger.d(TAG, "Registration GCM token success (our side)");
                                 // Persist the regID - no need to register again.

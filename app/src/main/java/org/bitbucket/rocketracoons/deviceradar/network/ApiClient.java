@@ -43,7 +43,7 @@ public interface ApiClient {
 
     // TODO: something like url encoded
     @POST("/messenger/registration")
-    void registerPushToken(@Body RegisterTokenRequest request, Callback<String> callback);
+    void registerPushToken(@Body RegisterTokenRequest request, Callback<Object> callback);
 
     @DELETE("/device/{guid}")
     void unregisterDevice(@Path("guid") String deviceGuid, Callback<Device> callback);
