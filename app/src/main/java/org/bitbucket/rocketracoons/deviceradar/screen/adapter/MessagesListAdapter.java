@@ -12,6 +12,7 @@ import org.bitbucket.rocketracoons.deviceradar.model.Message;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -22,10 +23,10 @@ import butterknife.InjectView;
  * Created by Igor.Veyalkin on 15.06.2014.
  */
 public class MessagesListAdapter extends BaseAdapter {
-    private List<Message> messages;
+    private ArrayList<Message> messages;
     private final LayoutInflater layoutInflater;
 
-    public MessagesListAdapter(Activity context, Set<Message> messagesList) {
+    public MessagesListAdapter(Activity context, LinkedList<Message> messagesList) {
         setMessages(messagesList);
         this.layoutInflater = context.getLayoutInflater();
     }
@@ -42,12 +43,8 @@ public class MessagesListAdapter extends BaseAdapter {
         }
     }
 
-    public void setMessages(Set<Message> messages) {
-        ArrayList<Message> list = new ArrayList<Message>(messages.size());
-        for (final Message msg : messages) {
-            list.add(msg);
-        }
-        this.messages = list;
+    public void setMessages(LinkedList<Message> messages) {
+        this.messages =  new ArrayList<Message>(messages);
         notifyDataSetChanged();
     }
 
