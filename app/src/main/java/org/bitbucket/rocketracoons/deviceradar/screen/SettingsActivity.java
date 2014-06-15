@@ -19,17 +19,15 @@ import org.bitbucket.rocketracoons.deviceradar.RadarApplication;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.model.ExtendedDeviceData;
 import org.bitbucket.rocketracoons.deviceradar.network.ApiClient;
-import org.bitbucket.rocketracoons.deviceradar.network.model.LoginRequest;
+import org.bitbucket.rocketracoons.deviceradar.network.HackedCallback;
 import org.bitbucket.rocketracoons.deviceradar.utility.DataCollector;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
-import java.io.EOFException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -104,7 +102,7 @@ public class SettingsActivity extends Activity {
 
         final ApiClient apiClient = Utility.getApiClient();
         setProgressBarIndeterminateVisibility(true);
-        apiClient.registerDevice(deviceToRegister, new Callback<Device>() {
+        apiClient.registerDevice(deviceToRegister, new HackedCallback<Device>() {
             @Override
             public void success(Device device, Response response) {
                 Logger.v(TAG, "Register success for: " + device);
@@ -115,16 +113,16 @@ public class SettingsActivity extends Activity {
             }
 
             @Override
-            public void failure(RetrofitError retrofitError) {
-                if(retrofitError.getCause().getClass().equals(EOFException.class)){
-                    apiClient.registerDevice(deviceToRegister, this);
-                    return;
-                }
-
+            protected void handleError(RetrofitError retrofitError) {
                 Logger.v(TAG, "Register failure for: " + deviceToRegister + " with: "
                         + retrofitError);
                 Toast.makeText(SettingsActivity.this, "An error occurred while registering the device", Toast.LENGTH_SHORT).show();
                 setProgressBarIndeterminateVisibility(false);
+            }
+
+            @Override
+            protected void repeat() {
+                apiClient.registerDevice(deviceToRegister, this);
             }
         });
     }
@@ -134,7 +132,7 @@ public class SettingsActivity extends Activity {
 
         final ApiClient apiClient = Utility.getApiClient();
         setProgressBarIndeterminateVisibility(true);
-        apiClient.unregisterDevice(DataCollector.collectDeviceGUID(), new Callback<Device>() {
+        apiClient.unregisterDevice(DataCollector.collectDeviceGUID(), new HackedCallback<Device>() {
             @Override
             public void success(Device device, Response response) {
                 Logger.v(TAG, "Unregister success");
@@ -145,16 +143,16 @@ public class SettingsActivity extends Activity {
             }
 
             @Override
-            public void failure(RetrofitError retrofitError) {
-                if(retrofitError.getCause().getClass().equals(EOFException.class)){
-                    apiClient.unregisterDevice(DataCollector.collectDeviceGUID(), this);
-                    return;
-                }
-
+            protected void handleError(RetrofitError retrofitError) {
                 Logger.v(TAG, "Register failure with: "
                         + retrofitError);
                 Toast.makeText(SettingsActivity.this, "An error occurred while unregistering the device", Toast.LENGTH_SHORT).show();
                 setProgressBarIndeterminateVisibility(false);
+            }
+
+            @Override
+            protected void repeat() {
+                apiClient.unregisterDevice(DataCollector.collectDeviceGUID(), this);
             }
         });
     }

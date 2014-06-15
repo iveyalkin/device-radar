@@ -19,17 +19,15 @@ import org.bitbucket.rocketracoons.deviceradar.MessageProvider;
 import org.bitbucket.rocketracoons.deviceradar.R;
 import org.bitbucket.rocketracoons.deviceradar.RadarApplication;
 import org.bitbucket.rocketracoons.deviceradar.model.Message;
+import org.bitbucket.rocketracoons.deviceradar.network.HackedCallback;
 import org.bitbucket.rocketracoons.deviceradar.network.model.SendMessageRequest;
 import org.bitbucket.rocketracoons.deviceradar.screen.adapter.MessagesListAdapter;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
-import java.io.EOFException;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -120,7 +118,7 @@ public class MessagesActivity extends Activity {
         final String messageText = messageTextField.getText().toString();
         final SendMessageRequest request = new SendMessageRequest(threadAuthorId,
                 messageText, RadarApplication.instance.getDeviceGuid());
-        Utility.getApiClient().sendMessage(request, new Callback<Message>() {
+        Utility.getApiClient().sendMessage(request, new HackedCallback<Message>() {
             @Override
             public void success(Message message, Response response) {
                 Logger.d(TAG, "Message sent successfully. Message: " + message);
@@ -130,13 +128,13 @@ public class MessagesActivity extends Activity {
             }
 
             @Override
-            public void failure(RetrofitError retrofitError) {
-                if(retrofitError.getCause().getClass().equals(EOFException.class)){
-                    Utility.getApiClient().sendMessage(request, this);
-                    return;
-                }
-
+            protected void handleError(RetrofitError retrofitError) {
                 Logger.e(TAG, "Failed to send message. Message: " + messageText, retrofitError);
+            }
+
+            @Override
+            protected void repeat() {
+                Utility.getApiClient().sendMessage(request, this);
             }
         });
     }

@@ -1,6 +1,5 @@
 package org.bitbucket.rocketracoons.deviceradar.network;
 
-import com.google.gson.JsonElement;
 
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.model.DeviceData;
@@ -13,7 +12,6 @@ import org.bitbucket.rocketracoons.deviceradar.network.model.LoginResponse;
 
 import java.util.ArrayList;
 
-import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.GET;
@@ -26,25 +24,25 @@ import retrofit.http.Path;
  */
 public interface ApiClient {
     @GET("/device")
-    void getDevicesList(Callback<ArrayList<Device>> callback);
+    void getDevicesList(HackedCallback<ArrayList<Device>> callback);
 
     @PUT("/update/{guid}")
     void updateDeviceData(@Path("guid") String deviceGuid, @Body DeviceData deviceData,
-                          Callback<Device> callback);
+                          HackedCallback<Device> callback);
 
     @POST("/messenger/send")
-    void sendMessage(@Body SendMessageRequest request, Callback<Message> callback);
+    void sendMessage(@Body SendMessageRequest request, HackedCallback<Message> callback);
 
     @POST("/device")
-    void registerDevice(@Body ExtendedDeviceData deviceData, Callback<Device> callback);
+    void registerDevice(@Body ExtendedDeviceData deviceData, HackedCallback<Device> callback);
 
     // TODO: something like url encoded
     @POST("/messenger/registration")
-    void registerPushToken(@Body RegisterTokenRequest request, Callback<Object> callback);
+    void registerPushToken(@Body RegisterTokenRequest request, HackedCallback<Object> callback);
 
     @DELETE("/device/{guid}")
-    void unregisterDevice(@Path("guid") String deviceGuid, Callback<Device> callback);
+    void unregisterDevice(@Path("guid") String deviceGuid, HackedCallback<Device> callback);
 
     @POST("/auth")
-    void auth(@Body LoginRequest loginRequest, Callback<LoginResponse> callback);
+    void auth(@Body LoginRequest loginRequest, HackedCallback<LoginResponse> callback);
 }

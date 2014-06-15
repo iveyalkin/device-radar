@@ -25,6 +25,7 @@ import org.bitbucket.rocketracoons.deviceradar.R;
 import org.bitbucket.rocketracoons.deviceradar.RadarApplication;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.network.ApiClient;
+import org.bitbucket.rocketracoons.deviceradar.network.HackedCallback;
 import org.bitbucket.rocketracoons.deviceradar.network.model.LoginRequest;
 import org.bitbucket.rocketracoons.deviceradar.network.model.LoginResponse;
 import org.bitbucket.rocketracoons.deviceradar.screen.adapter.DevicesListAdapter;
@@ -32,15 +33,12 @@ import org.bitbucket.rocketracoons.deviceradar.utility.GcmSupportedType;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
-import java.io.EOFException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import butterknife.OnItemClick;
-import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -112,7 +110,7 @@ public class MainActivity extends Activity {
 
     private void requestDeviceList() {
         setProgressBarVisibility(true);
-        Utility.getApiClient().getDevicesList(new Callback<ArrayList<Device>>() {
+        Utility.getApiClient().getDevicesList(new HackedCallback<ArrayList<Device>>() {
             @Override
             public void success(ArrayList<Device> devices, Response response) {
                 devicesList = devices;
@@ -121,15 +119,15 @@ public class MainActivity extends Activity {
             }
 
             @Override
-            public void failure(RetrofitError retrofitError) {
-                if(retrofitError.getCause().getClass().equals(EOFException.class)){
-                    Utility.getApiClient().getDevicesList(this);
-                    return;
-                }
-
+            protected void handleError(RetrofitError retrofitError) {
                 Toast.makeText(MainActivity.this, "Sorry, service is unavailable", Toast.LENGTH_SHORT).show();
                 devicesListView.setAdapter(new DevicesListAdapter(MainActivity.this, null));
                 setProgressBarIndeterminateVisibility(false);
+            }
+
+            @Override
+            protected void repeat() {
+                Utility.getApiClient().getDevicesList(this);
             }
         });
     }
@@ -205,7 +203,7 @@ public class MainActivity extends Activity {
     private void processLogin(final String login, final String password) {
         final ApiClient apiClient = Utility.getApiClient();
         setProgressBarIndeterminateVisibility(true);
-        apiClient.auth(new LoginRequest(login, password), new Callback<LoginResponse>() {
+        apiClient.auth(new LoginRequest(login, password), new HackedCallback<LoginResponse>() {
                 @Override
                 public void success(LoginResponse loginResponse, Response response) {
                     Logger.v(TAG, "Login success for");
@@ -217,20 +215,19 @@ public class MainActivity extends Activity {
                     } else {
                         Toast.makeText(MainActivity.this, "You don't have enough rights to manage the device", Toast.LENGTH_SHORT).show();
                     }
-
                 }
 
                 @Override
-                public void failure(RetrofitError retrofitError) {
-                    if(retrofitError.getCause().getClass().equals(EOFException.class)){
-                        apiClient.auth(new LoginRequest(login, password), this);
-                        return;
-                    }
-
+                protected void handleError(RetrofitError retrofitError) {
                     Logger.v(TAG, "Login failure with: "
                             + retrofitError);
                     Toast.makeText(MainActivity.this, "Can't log in", Toast.LENGTH_SHORT).show();
                     setProgressBarIndeterminateVisibility(false);
+                }
+
+                @Override
+                protected void repeat() {
+                    apiClient.auth(new LoginRequest(login, password), this);
                 }
         });
     }

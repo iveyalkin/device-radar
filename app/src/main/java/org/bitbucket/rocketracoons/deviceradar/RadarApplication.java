@@ -5,15 +5,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.text.TextUtils;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.gson.JsonElement;
 
+import org.bitbucket.rocketracoons.deviceradar.network.HackedCallback;
 import org.bitbucket.rocketracoons.deviceradar.network.model.RegisterTokenRequest;
 import org.bitbucket.rocketracoons.deviceradar.task.GcmRegistrationTask;
 import org.bitbucket.rocketracoons.deviceradar.utility.Constants;
@@ -22,11 +21,8 @@ import org.bitbucket.rocketracoons.deviceradar.utility.GcmSupportedType;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
-import java.io.EOFException;
 import java.util.ArrayList;
-import java.util.List;
 
-import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -148,7 +144,7 @@ public class RadarApplication extends Application {
                     }
                     final RegisterTokenRequest request = new RegisterTokenRequest(getDeviceGuid(),
                             registrationId);
-                    Utility.getApiClient().registerPushToken(request, new Callback<Object>() {
+                    Utility.getApiClient().registerPushToken(request, new HackedCallback<Object>() {
                         @Override
                         public void success(Object result, Response response) {
                             Logger.d(TAG, "Registration GCM token success (our side)");
@@ -156,12 +152,13 @@ public class RadarApplication extends Application {
                         }
 
                         @Override
-                        public void failure(RetrofitError retrofitError) {
-                            if(retrofitError.getCause().getClass().equals(EOFException.class)){
-                                Utility.getApiClient().registerPushToken(request, this);
-                                return;
-                            }
+                        protected void handleError(RetrofitError retrofitError) {
                             Logger.e(TAG, "Registration token failed (our side)", retrofitError);
+                        }
+
+                        @Override
+                        protected void repeat() {
+                            Utility.getApiClient().registerPushToken(request, this);
                         }
                     });
                 }
