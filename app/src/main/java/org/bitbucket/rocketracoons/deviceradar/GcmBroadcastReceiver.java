@@ -62,6 +62,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent messageActivity = new Intent(context, MessagesActivity.class);
+        messageActivity.putExtra(MessagesActivity.ARG_AUTHOR_ID, pushNotification.authorId);
         PendingIntent contentIntent = PendingIntent.getActivity(context, REQUEST_CODE,
                 messageActivity, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -71,6 +72,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
                         .setContentTitle(context.getString(R.string.app_name))
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(pushNotification.message.message))
+                        .setAutoCancel(true)
                         .setContentText(pushNotification.message.message);
 
         mBuilder.setContentIntent(contentIntent);
