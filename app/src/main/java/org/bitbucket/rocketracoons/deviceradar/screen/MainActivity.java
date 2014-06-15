@@ -45,6 +45,7 @@ import butterknife.OnItemClick;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 
 
 public class MainActivity extends Activity {
@@ -60,6 +61,7 @@ public class MainActivity extends Activity {
     ListView devicesListView;
 
     List<Device> devicesList;
+    private PullToRefreshLayout mPullToRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,18 @@ public class MainActivity extends Activity {
 //        device.name = "Android-005";
 //        device.osVersion = "Android 4.0.4";
 //        devicesList.add(device);
+
+        // Now find the PullToRefreshLayout to setup
+       /* mPullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
+
+        // Now setup the PullToRefreshLayout
+        ActionBarPullToRefresh.from(this)
+                // Mark All Children as pullable
+                .allChildrenArePullable()
+                        // Set a OnRefreshListener
+                .listener(...)
+        // Finally commit the setup to our PullToRefreshLayout
+        .setup(mPullToRefreshLayout);*/
     }
 
     @Override
