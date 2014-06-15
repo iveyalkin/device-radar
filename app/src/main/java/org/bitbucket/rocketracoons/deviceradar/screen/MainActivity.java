@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ListView;
@@ -147,7 +147,11 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            showLoginPrompt();
+            if (TextUtils.isEmpty(RadarApplication.instance.getUserToken())) {
+                showLoginPrompt();
+            } else {
+                tryOpenSettings(RadarApplication.instance.getUserRole());
+            }
             return true;
         } else if(id == R.id.action_messages) {
             Intent intent = new Intent(this, MessagesListActivity.class);
@@ -211,14 +215,9 @@ public class MainActivity extends Activity {
                 @Override
                 public void success(LoginResponse loginResponse, Response response) {
                     Logger.v(TAG, "Login success for");
-                    RadarApplication.instance.setUserToken(loginResponse.sessionId,
-                            loginResponse.role);
-                    if (loginResponse.role.equalsIgnoreCase("admin")) {
-                        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(MainActivity.this, "You don't have enough rights to manage the device", Toast.LENGTH_SHORT).show();
-                    }
+                    RadarApplication.instance.setUserToken(loginResponse.sessionId);
+                    RadarApplication.instance.setUserRole(loginResponse.role);
+                    tryOpenSettings(loginResponse.role);
                 }
 
                 @Override
@@ -234,6 +233,15 @@ public class MainActivity extends Activity {
                     apiClient.auth(new LoginRequest(login, password), this);
                 }
         });
+    }
+
+    private void tryOpenSettings(String role) {
+        if (role.equalsIgnoreCase("admin")) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "You don't have enough rights to manage the device", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

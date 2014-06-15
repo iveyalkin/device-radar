@@ -33,11 +33,11 @@ public class RadarApplication extends Application {
     private static final String TAG = RadarApplication.class.getSimpleName();
 
     private static final String GCM_PROPERTY_REG_ID = "gcm_property_reg_id";
-    private static final String USER_TOKEN = "user_token";
+//    private static final String USER_TOKEN = "user_token";
     public static final String DEVICE_REGISTERED_PREFERENCE_NAME = "device_registered_preference_name";
     public static final String DEVICE_NAME_PREFERENCE_NAME = "device_name_preference_name";
     private static final String PROPERTY_APP_VERSION = "appVersion";
-    private static final String USER_ROLE = "user_role";
+//    private static final String USER_ROLE = "user_role";
 
     public static RadarApplication instance = null;
 
@@ -207,15 +207,30 @@ public class RadarApplication extends Application {
         return getSharedPreferences().getString(DEVICE_NAME_PREFERENCE_NAME, "Unknown");
     }
 
+    private static String sUserToken;
+    private static String sUserRole;
     public String getUserToken() {
-        return getSharedPreferences().getString(USER_TOKEN, "");
+//        return getSharedPreferences().getString(USER_TOKEN, "");
+        return sUserToken;
     }
 
-    public void setUserToken(String token, String role) {
-        getSharedPreferences().edit()
-                .putString(USER_TOKEN, token)
-                .putString(USER_ROLE, role)
-                .apply();
+    public void setUserToken(String token) {
+//        getSharedPreferences().edit()
+//                .putString(USER_TOKEN, token)
+//                .apply();
+        sUserToken = token;
+    }
+
+    public void setUserRole(String role) {
+//        getSharedPreferences().edit()
+//                .putString(USER_ROLE, role)
+//                .apply();
+        sUserRole = role;
+    }
+
+    public String getUserRole() {
+//        return getSharedPreferences().getString(USER_ROLE, "");
+        return sUserRole;
     }
 
     public double[] getLocation() {
