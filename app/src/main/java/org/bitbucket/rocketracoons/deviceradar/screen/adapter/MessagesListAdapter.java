@@ -5,8 +5,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.bitbucket.rocketracoons.deviceradar.R;
@@ -41,11 +43,8 @@ public class MessagesListAdapter extends BaseAdapter {
         @InjectView(R.id.dateField)
         public TextView dateField;
 
-        public LinearLayout container;
-
-        public ViewHolder(LinearLayout view) {
+        public ViewHolder(View view) {
             ButterKnife.inject(this, view);
-            container = view;
         }
     }
 
@@ -77,10 +76,8 @@ public class MessagesListAdapter extends BaseAdapter {
         ViewHolder holder;
         View rowView = convertView;
         if (rowView == null) {
-            LinearLayout layout = (LinearLayout) layoutInflater
-                    .inflate(R.layout.list_item_message_description, null);
-            holder = new ViewHolder(layout);
-            rowView = layout;
+            rowView = layoutInflater.inflate(R.layout.list_item_message_description, null);
+            holder = new ViewHolder(rowView);
             rowView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
@@ -92,19 +89,37 @@ public class MessagesListAdapter extends BaseAdapter {
         holder.authorField.setText(message.authorName);
         holder.dateField.setText(new SimpleDateFormat().format(message.date));
 
-        LinearLayout.LayoutParams layoutParams =
-                (LinearLayout.LayoutParams) holder.container.getLayoutParams();
-        if (null == layoutParams) {
-            layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        alighMessageView(holder, message);
+
+        return rowView;
+    }
+
+    private void alighMessageView(ViewHolder holder, Message message) {
+        LinearLayout.LayoutParams messageLp =
+                (LinearLayout.LayoutParams) holder.messageField.getLayoutParams();
+        LinearLayout.LayoutParams authorLp =
+                (LinearLayout.LayoutParams) holder.authorField.getLayoutParams();
+        LinearLayout.LayoutParams dataLp =
+                (LinearLayout.LayoutParams) holder.dateField.getLayoutParams();
+        if (null == messageLp) {
+            messageLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+        }
+        if (null == authorLp) {
+            authorLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+        }
+        if (null == dataLp) {
+            dataLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT);
         }
         if (Message.Type.OUTBOUND == message.type) {
-            layoutParams.gravity = Gravity.RIGHT;
+            messageLp.gravity = authorLp.gravity = dataLp.gravity = Gravity.RIGHT;
         } else {
-            layoutParams.gravity = Gravity.LEFT;
+            messageLp.gravity = authorLp.gravity = dataLp.gravity = Gravity.LEFT;
         }
-        holder.container.setLayoutParams(layoutParams);
-
-        return rowView;
+        holder.messageField.setLayoutParams(messageLp);
+        holder.authorField.setLayoutParams(authorLp);
+        holder.dateField.setLayoutParams(dataLp);
     }
 }
