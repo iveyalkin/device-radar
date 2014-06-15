@@ -8,13 +8,11 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import org.bitbucket.rocketracoons.deviceradar.model.Device;
 import org.bitbucket.rocketracoons.deviceradar.model.DeviceData;
 import org.bitbucket.rocketracoons.deviceradar.network.ApiClient;
+import org.bitbucket.rocketracoons.deviceradar.network.HackedCallback;
 import org.bitbucket.rocketracoons.deviceradar.utility.DataCollector;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
-import java.io.EOFException;
-
-import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -54,7 +52,7 @@ public class TrackerService extends IntentService {
         Logger.v(TAG, "Updating device data: " + data);
 
         final ApiClient apiClient = Utility.getApiClient();
-        apiClient.updateDeviceData(data.guid, data, new Callback<Device>() {
+        apiClient.updateDeviceData(data.guid, data, new HackedCallback<Device>() {
             @Override
             public void success(Device device, Response response) {
                 Logger.v(TAG, "Update success for: " + device);
@@ -62,14 +60,14 @@ public class TrackerService extends IntentService {
             }
 
             @Override
-            public void failure(RetrofitError retrofitError) {
-                if(retrofitError.getCause().getClass().equals(EOFException.class)){
-                    apiClient.updateDeviceData(data.guid, data, this);
-                    return;
-                }
-
+            protected void handleError(RetrofitError retrofitError) {
                 Logger.v(TAG, "Update failure for: " + data + " with: " + retrofitError);
                 WakefulBroadcastReceiver.completeWakefulIntent(intent);
+            }
+
+            @Override
+            protected void repeat() {
+                apiClient.updateDeviceData(data.guid, data, this);
             }
         });
     }
