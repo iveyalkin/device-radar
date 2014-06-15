@@ -19,5 +19,6 @@
     <string name="passwordHint">Password</string>
     <string name="deviceNameHint">Device name</string>
     <string name="action_messages">Messages</string>
+    <string name="action_refresh">Refresh</string>
 
 </resources>

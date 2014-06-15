@@ -5,10 +5,15 @@
         android:title="@string/action_settings"
         android:icon="@drawable/settings"
         android:orderInCategory="100"
-        android:showAsAction="always" />
+        android:showAsAction="ifRoom" />
     <item android:id="@+id/action_messages"
         android:title="@string/action_messages"
         android:icon="@drawable/message"
         android:orderInCategory="99"
-        android:showAsAction="always" />
+        android:showAsAction="ifRoom" />
+    <item android:id="@+id/action_refresh"
+        android:title="@string/action_refresh"
+        android:icon="@android:drawable/ic_popup_sync"
+        android:orderInCategory="98"
+        android:showAsAction="ifRoom" />
 </menu>

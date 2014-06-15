@@ -116,6 +116,7 @@ public class MainActivity extends Activity {
                 devicesList = devices;
                 devicesListView.setAdapter(new DevicesListAdapter(MainActivity.this, devicesList));
                 setProgressBarIndeterminateVisibility(false);
+                searchField.setText("");
             }
 
             @Override
@@ -151,6 +152,9 @@ public class MainActivity extends Activity {
         } else if(id == R.id.action_messages) {
             Intent intent = new Intent(this, MessagesListActivity.class);
             startActivity(intent);
+            return true;
+        }else if(id == R.id.action_refresh) {
+            requestDeviceList();
             return true;
         }
         return super.onOptionsItemSelected(item);
