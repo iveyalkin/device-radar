@@ -44,7 +44,11 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
                     MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 Logger.d(TAG, "Got GCM message: " + extras.toString());
                 proccessGcmMessage(context, extras);
+            } else {
+                Logger.d(TAG, "Got GCM message but unknown type: " + messageType);
             }
+        } else {
+            Logger.d(TAG, "Got GCM message but emty extra");
         }
     }
 
