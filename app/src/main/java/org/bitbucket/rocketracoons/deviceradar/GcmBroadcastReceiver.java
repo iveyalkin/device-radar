@@ -23,8 +23,8 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = GcmBroadcastReceiver.class.getSimpleName();
     private static final String GCM_PAYLOAD = "message";
     private static final int REQUEST_CODE = 0xff00;
-    private static final int DEFAULT_NOTIFICATION_ID = 0xff00;
 
+    public static final int DEFAULT_NOTIFICATION_ID = 0xff00;
     public static final String EVENT_PUSH_RECEIVED = "event_push_received";
 
     @Override

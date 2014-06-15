@@ -1,6 +1,7 @@
 package org.bitbucket.rocketracoons.deviceradar.screen;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -51,6 +52,10 @@ public class MessagesActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             adapter.setMessages(MessageProvider.getMessages(threadAuthorId));
+
+            NotificationManager manager =
+                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            manager.cancel(GcmBroadcastReceiver.DEFAULT_NOTIFICATION_ID);
         }
     };
     private IntentFilter localFilter = new IntentFilter(GcmBroadcastReceiver.EVENT_PUSH_RECEIVED);
@@ -78,6 +83,9 @@ public class MessagesActivity extends Activity {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(localReceiver, localFilter);
         adapter.setMessages(MessageProvider.getMessages(threadAuthorId));
+
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.cancel(GcmBroadcastReceiver.DEFAULT_NOTIFICATION_ID);
     }
 
     @Override
