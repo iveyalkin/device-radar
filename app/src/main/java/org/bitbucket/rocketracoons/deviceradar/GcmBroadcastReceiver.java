@@ -49,7 +49,10 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
     private void proccessGcmMessage(Context context, Bundle gcmMessage) {
         PushNotification pushNotification = Utility.getGsonInstance().fromJson(
                 gcmMessage.getString(GCM_PAYLOAD), PushNotification.class);
-
+        if (null == pushNotification) {
+            Logger.w(TAG, "Unexpected gcm message");
+            return;
+        }
         MessageProgider.addMessage(pushNotification.authorId, pushNotification.message);
 
         raiseNotification(context, pushNotification);
