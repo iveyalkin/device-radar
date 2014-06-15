@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.bitbucket.rocketracoons.deviceradar.MessageProgider;
 import org.bitbucket.rocketracoons.deviceradar.R;
 
 import butterknife.ButterKnife;
@@ -49,5 +50,11 @@ public class MessagesListActivity extends Activity {
     @OnItemClick(R.id.listView)
     public void onMessageSelected(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MessageProgider.getCollection();
     }
 }

@@ -28,5 +28,9 @@ public class MessageProgider {
         return null != messages ? messages : new TreeSet();
     }
 
+    public static final Map<String, TreeSet<Message>> getCollection() {
+        return sMessages;
+    }
+
 
 }

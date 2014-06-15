@@ -57,17 +57,18 @@ public class MessagesActivity extends Activity {
         if (null != extras && extras.containsKey(ARG_AUTHOR_ID)) {
             threadAuthorId = extras.getString(ARG_AUTHOR_ID);
             Logger.w(TAG, "Show thread with authorId: " + threadAuthorId);
-            prepareAdapter(threadAuthorId);
+            adapter = new MessagesListAdapter(this, MessageProgider.getMessages((threadAuthorId));
         } else {
             Logger.w(TAG, "Nothing to show");
             finish();
         }
     }
 
-    private void prepareAdapter(String threadAuthorId) {
-        adapter = new MessagesListAdapter(this, MessageProgider.getMessages(threadAuthorId));
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.setMessages(MessageProgider.getMessages(threadAuthorId));
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
