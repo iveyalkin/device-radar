@@ -69,6 +69,12 @@ public class DeviceDetailsActivity extends Activity {
                 stringBuilder.append('\n');
             }
 
+            if (!TextUtils.isEmpty(device.accessPointName)) {
+                stringBuilder.append("Last known location: ");
+                stringBuilder.append(device.accessPointName);
+                stringBuilder.append('\n');
+            }
+
             if (!TextUtils.isEmpty(device.screen)) {
                 stringBuilder.append("Screen Resolution: ");
                 stringBuilder.append(device.screen);

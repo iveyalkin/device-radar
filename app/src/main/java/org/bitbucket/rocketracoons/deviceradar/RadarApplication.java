@@ -22,6 +22,7 @@ import org.bitbucket.rocketracoons.deviceradar.utility.GcmSupportedType;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
@@ -209,18 +210,29 @@ public class RadarApplication extends Application {
     public double[] getLocation() {
         LocationManager locationManager =
                 (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        ArrayList<Location> locations = new ArrayList<Location>();
         for (final String provider: locationManager.getAllProviders()) {
-            Location location = locationManager.getLastKnownLocation("network");
+            Location location = locationManager.getLastKnownLocation(provider);
             if (null != location) {
-                final double[] coordinates = {location.getLatitude(), location.getLongitude()};
-                Logger.d(TAG, "Found last known location {" + coordinates[0] + "; "
-                        + coordinates[1] + "}");
-                return coordinates;
+                locations.add(location);
             } else {
                 Logger.w(TAG, "Last known location not found for provider " + provider);
             }
         }
 
-        return new double[] {0.0d, 0.0d};
+        if (locations.size() != 0) {
+            Location bestLocation = locations.get(0);
+            for (Location location: locations) {
+                if (location.getAccuracy() > bestLocation.getAccuracy()) {
+                    bestLocation = location;
+                }
+            }
+            final double[] coordinates = {bestLocation.getLatitude(), bestLocation.getLongitude()};
+            Logger.d(TAG, "Found last known location {" + coordinates[0] + "; "
+                    + coordinates[1] + "}");
+            return coordinates;
+        } else {
+            return new double[]{0.0d, 0.0d};
+        }
     }
 }

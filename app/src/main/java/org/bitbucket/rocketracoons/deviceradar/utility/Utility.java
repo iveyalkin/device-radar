@@ -17,7 +17,9 @@ import org.bitbucket.rocketracoons.deviceradar.network.deserializer.MessageTypeD
 
 import java.util.Date;
 
+import retrofit.ErrorHandler;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
 import retrofit.converter.GsonConverter;
 
 /**
