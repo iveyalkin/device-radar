@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +15,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -48,8 +51,6 @@ public class MainActivity extends Activity {
 
     @InjectView(R.id.searchField)
     EditText searchField;
-    @InjectView(R.id.startSearch)
-    Button startSearch;
     @InjectView(R.id.listView)
     ListView devicesListView;
 
@@ -61,16 +62,26 @@ public class MainActivity extends Activity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-//        devicesList = new ArrayList<Device>();
-//        Device device = new Device();
-//        device.name = "Android-004";
-//        device.osVersion = "Android 4.2.1";
-//        devicesList.add(device);
-//
-//        device = new Device();
-//        device.name = "Android-005";
-//        device.osVersion = "Android 4.0.4";
-//        devicesList.add(device);
+
+        searchField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    DevicesListAdapter adapter = (DevicesListAdapter) devicesListView.getAdapter();
+                    Filter filter = adapter.getFilter();
+                    String constraint = s.toString();
+                    filter.filter(constraint);
+                } catch (Exception e) {
+                    Logger.e(TAG, "Almost unhandled error", e);
+                }
+            }
+        });
     }
 
     @Override
@@ -144,11 +155,6 @@ public class MainActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @OnClick(R.id.startSearch)
-    public void startSearch(Button button) {
-        ((DevicesListAdapter)devicesListView.getAdapter()).getFilter().filter(searchField.getText().toString());
     }
 
     @OnItemClick(R.id.listView)
