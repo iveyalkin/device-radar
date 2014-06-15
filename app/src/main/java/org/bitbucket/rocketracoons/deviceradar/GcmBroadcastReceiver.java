@@ -20,7 +20,7 @@ import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
  */
 public class GcmBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = GcmBroadcastReceiver.class.getSimpleName();
-    private static final String GCM_PAYLOAD = "payload";
+    private static final String GCM_PAYLOAD = "message";
     private static final int REQUEST_CODE = 0xff00;
     private static final int DEFAULT_NOTIFICATION_ID = 0xff00;
 
