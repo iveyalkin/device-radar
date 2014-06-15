@@ -2,10 +2,8 @@ package org.bitbucket.rocketracoons.deviceradar.screen;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,10 +16,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.bitbucket.rocketracoons.deviceradar.R;
 import org.bitbucket.rocketracoons.deviceradar.RadarApplication;
@@ -30,7 +25,6 @@ import org.bitbucket.rocketracoons.deviceradar.network.ApiClient;
 import org.bitbucket.rocketracoons.deviceradar.network.model.LoginRequest;
 import org.bitbucket.rocketracoons.deviceradar.network.model.LoginResponse;
 import org.bitbucket.rocketracoons.deviceradar.screen.adapter.DevicesListAdapter;
-import org.bitbucket.rocketracoons.deviceradar.utility.DataCollector;
 import org.bitbucket.rocketracoons.deviceradar.utility.GcmSupportedType;
 import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
@@ -45,7 +39,6 @@ import butterknife.OnItemClick;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 
 
 public class MainActivity extends Activity {
@@ -61,7 +54,6 @@ public class MainActivity extends Activity {
     ListView devicesListView;
 
     List<Device> devicesList;
-    private PullToRefreshLayout mPullToRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,18 +71,6 @@ public class MainActivity extends Activity {
 //        device.name = "Android-005";
 //        device.osVersion = "Android 4.0.4";
 //        devicesList.add(device);
-
-        // Now find the PullToRefreshLayout to setup
-       /* mPullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
-
-        // Now setup the PullToRefreshLayout
-        ActionBarPullToRefresh.from(this)
-                // Mark All Children as pullable
-                .allChildrenArePullable()
-                        // Set a OnRefreshListener
-                .listener(...)
-        // Finally commit the setup to our PullToRefreshLayout
-        .setup(mPullToRefreshLayout);*/
     }
 
     @Override
