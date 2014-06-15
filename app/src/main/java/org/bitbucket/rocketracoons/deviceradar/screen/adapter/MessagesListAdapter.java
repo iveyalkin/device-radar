@@ -94,6 +94,10 @@ public class MessagesListAdapter extends BaseAdapter {
 
         LinearLayout.LayoutParams layoutParams =
                 (LinearLayout.LayoutParams) holder.container.getLayoutParams();
+        if (null == layoutParams) {
+            layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+        }
         if (Message.Type.OUTBOUND == message.type) {
             layoutParams.gravity = Gravity.RIGHT;
         } else {
