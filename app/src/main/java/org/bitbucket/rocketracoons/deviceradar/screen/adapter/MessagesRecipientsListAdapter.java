@@ -84,7 +84,7 @@ public class MessagesRecipientsListAdapter extends BaseAdapter {
         final Pair<String, Integer> recipient = getItem(position);
 
         holder.recipientField.setText(recipient.first);
-        holder.counterField.setText(recipient.second);
+        holder.counterField.setText(String.valueOf(recipient.second));
 
         return rowView;
     }
