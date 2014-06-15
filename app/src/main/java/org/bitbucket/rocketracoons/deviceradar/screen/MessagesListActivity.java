@@ -1,13 +1,19 @@
 package org.bitbucket.rocketracoons.deviceradar.screen;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.bitbucket.rocketracoons.deviceradar.GcmBroadcastReceiver;
 import org.bitbucket.rocketracoons.deviceradar.MessageProvider;
 import org.bitbucket.rocketracoons.deviceradar.R;
 import org.bitbucket.rocketracoons.deviceradar.screen.adapter.MessagesRecipientsListAdapter;
@@ -22,6 +28,13 @@ public class MessagesListActivity extends Activity {
     ListView messagesListView;
 
     private MessagesRecipientsListAdapter adapter;
+    private BroadcastReceiver localReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            adapter.setRecipients(MessageProvider.getStats());
+        }
+    };
+    private IntentFilter localFilter = new IntentFilter(GcmBroadcastReceiver.EVENT_PUSH_RECEIVED);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +68,21 @@ public class MessagesListActivity extends Activity {
 
     @OnItemClick(R.id.listView)
     public void onMessageSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        Intent messageActivity = new Intent(getApplicationContext(), MessagesActivity.class);
+        messageActivity.putExtra(MessagesActivity.ARG_AUTHOR_ID, adapter.getItem(position).first);
+        startActivity(messageActivity);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        MessageProvider.getStats();
+        LocalBroadcastManager.getInstance(this).registerReceiver(localReceiver, localFilter);
+        adapter.setRecipients(MessageProvider.getStats());
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(localReceiver);
+        super.onPause();
     }
 }

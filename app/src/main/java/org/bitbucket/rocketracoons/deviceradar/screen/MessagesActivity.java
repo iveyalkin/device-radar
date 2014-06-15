@@ -1,13 +1,19 @@
 package org.bitbucket.rocketracoons.deviceradar.screen;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import org.bitbucket.rocketracoons.deviceradar.GcmBroadcastReceiver;
 import org.bitbucket.rocketracoons.deviceradar.MessageProvider;
 import org.bitbucket.rocketracoons.deviceradar.R;
 import org.bitbucket.rocketracoons.deviceradar.RadarApplication;
@@ -41,6 +47,13 @@ public class MessagesActivity extends Activity {
 
     private String threadAuthorId;
     private MessagesListAdapter adapter;
+    private BroadcastReceiver localReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            adapter.setMessages(MessageProvider.getMessages(threadAuthorId));
+        }
+    };
+    private IntentFilter localFilter = new IntentFilter(GcmBroadcastReceiver.EVENT_PUSH_RECEIVED);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +76,14 @@ public class MessagesActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(localReceiver, localFilter);
         adapter.setMessages(MessageProvider.getMessages(threadAuthorId));
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(localReceiver);
+        super.onPause();
     }
 
     @Override
@@ -97,6 +117,7 @@ public class MessagesActivity extends Activity {
                 Logger.d(TAG, "Message sent successfully. Message: " + message);
                 MessageProvider.addMessage(threadAuthorId, message);
                 adapter.setMessages(MessageProvider.getMessages(threadAuthorId));
+                messageTextField.setText("");
             }
 
             @Override

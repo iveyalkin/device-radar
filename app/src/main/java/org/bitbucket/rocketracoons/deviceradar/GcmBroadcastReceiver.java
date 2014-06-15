@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -23,6 +24,8 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
     private static final String GCM_PAYLOAD = "message";
     private static final int REQUEST_CODE = 0xff00;
     private static final int DEFAULT_NOTIFICATION_ID = 0xff00;
+
+    public static final String EVENT_PUSH_RECEIVED = "event_push_received";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -52,7 +55,10 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
             Logger.w(TAG, "Unexpected gcm message");
             return;
         }
+
         MessageProvider.addMessage(pushNotification.authorId, pushNotification.message);
+        final LocalBroadcastManager manager = LocalBroadcastManager.getInstance(context);
+        manager.sendBroadcast(new Intent(GcmBroadcastReceiver.EVENT_PUSH_RECEIVED));
 
         raiseNotification(context, pushNotification);
     }
