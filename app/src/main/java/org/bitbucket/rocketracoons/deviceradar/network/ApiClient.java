@@ -25,7 +25,7 @@ import retrofit.http.Path;
  * Created by Igor.Veyalkin on 14.06.2014.
  */
 public interface ApiClient {
-    @GET("/update")
+    @GET("/device")
     void getDevicesList(Callback<ArrayList<Device>> callback);
 
     @PUT("/update/{guid}")
