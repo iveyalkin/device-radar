@@ -22,6 +22,7 @@ import org.bitbucket.rocketracoons.deviceradar.utility.Logger;
 import org.bitbucket.rocketracoons.deviceradar.utility.Utility;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
