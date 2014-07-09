@@ -1,6 +1,5 @@
 package org.bitbucket.rocketracoons.deviceradar;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -9,6 +8,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.text.TextUtils;
 
+import com.activeandroid.app.Application;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 

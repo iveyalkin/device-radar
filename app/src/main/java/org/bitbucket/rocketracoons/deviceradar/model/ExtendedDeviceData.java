@@ -15,7 +15,6 @@ public class ExtendedDeviceData extends DeviceData {
 
 
     protected ExtendedDeviceData() {
-        super();
     }
 
     public ExtendedDeviceData(String name,

@@ -52,6 +52,7 @@ public class Utility {
         if (null == sGsonInstance) {
             sGsonInstance = new GsonBuilder()
                     .registerTypeAdapter(Date.class, new DateDeserializer())
+                    .excludeFieldsWithoutExposeAnnotation()
                     .create();
         }
         return sGsonInstance;
