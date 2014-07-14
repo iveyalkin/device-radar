@@ -100,6 +100,11 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_settings"></activity>
+
+        <provider
+            android:authorities="org.bitbucket.rocketracoons.deviceradar"
+            android:exported="false"
+            android:name="com.activeandroid.content.ContentProvider" />
     </application>
 
 </manifest>

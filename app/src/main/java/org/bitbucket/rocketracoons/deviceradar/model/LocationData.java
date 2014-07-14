@@ -35,7 +35,8 @@ public class LocationData extends Model implements Serializable {
     @Expose
     public String macAddress;
 
-    protected LocationData() {
+    /** For internal use purposes only **/
+    public LocationData() {
     }
 
     public LocationData(double longitude, double latitude, String ssid, String macAddress) {
